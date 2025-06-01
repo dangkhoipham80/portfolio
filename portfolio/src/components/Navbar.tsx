@@ -17,6 +17,8 @@ const navItems = [
       { name: "Testimonials", path: "/testimonials" },
       { name: "Resume", path: "/resume" },
       { name: "Contributions", path: "/contributions" },
+      { name: "Contact", path: "/contact" },
+      { name: "Activity", path: "/activity" },
     ],
   },
 ];
