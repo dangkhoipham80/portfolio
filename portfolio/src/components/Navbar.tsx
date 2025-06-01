@@ -4,7 +4,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
+  { name: "About me", path: "/about" },
   { name: "Skills", path: "/skills" },
   { name: "Projects", path: "/projects" },
   {

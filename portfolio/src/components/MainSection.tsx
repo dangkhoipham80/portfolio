@@ -1,4 +1,5 @@
 import { ArrowDown } from "lucide-react";
+
 const MainSection = () => {
   return (
     <section
@@ -8,13 +9,25 @@ const MainSection = () => {
       <div className="container max-w-4xl mx-auto text-center z-10">
         <div className="space-y-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            <span className="opacity-0 animate-fade-in">Hi, I'm</span>
-            <span className="text-primary opacity-0 animate-fade-in-delay-1">
-              {" "}
+            <span className="opacity-0 animate-bounce-in inline-block">
+              Hi,
+            </span>
+            <span
+              className="opacity-0 animate-bounce-in inline-block mx-2"
+              style={{ animationDelay: "0.1s" }}
+            >
+              I'm
+            </span>
+            <span
+              className="text-primary opacity-0 animate-bounce-in inline-block mx-2"
+              style={{ animationDelay: "0.2s" }}
+            >
               Phạm
             </span>
-            <span className="text-gradient ml-2 opacity-0 animate-fade-in-delay-2">
-              {" "}
+            <span
+              className="text-gradient opacity-0 animate-bounce-in inline-block mx-2"
+              style={{ animationDelay: "0.4s" }}
+            >
               Đăng Khôi
             </span>
           </h1>

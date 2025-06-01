@@ -22,6 +22,9 @@
   --animate-meteor-sparkle: meteor-sparkle 3s ease-in-out infinite alternate;
   --animate-background-pan: background-pan 30s ease-in-out infinite alternate;
   --animate-sway: sway 8s ease-in-out infinite alternate;
+  --animate-bounce-subtle: bounce-subtle 1s ease-in-out infinite;
+  --animate-bounce-in: bounce-in 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    forwards;
 
   @keyframes float {
     0%,
@@ -115,6 +118,34 @@
     }
     100% {
       transform: translate(0, 0) rotate(0deg);
+    }
+  }
+  @keyframes bounce-subtle {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes bounce-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+    20% {
+      opacity: 1;
+    }
+    60% {
+      transform: translateY(20px);
+    }
+    80% {
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
