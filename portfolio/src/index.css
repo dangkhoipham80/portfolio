@@ -146,6 +146,11 @@
   animation-play-state: running;
   will-change: transform;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none; /* Hide by default */
+}
+
+.dark .moon {
+  display: block; /* Show only in dark mode */
 }
 
 @layer base {
