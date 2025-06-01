@@ -10,10 +10,30 @@ interface Star {
   animationDuration: number;
 }
 
+interface MousePosition {
+  x: number;
+  y: number;
+  rotateX: number;
+  rotateY: number;
+}
+
 const StarBackground = () => {
   const [stars, setStars] = useState<Star[]>([]);
   const [meteors, setMeteors] = useState<Star[]>([]);
   const backgroundRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number | undefined>(undefined);
+  const lastMousePosition = useRef<MousePosition>({
+    x: 0,
+    y: 0,
+    rotateX: 0,
+    rotateY: 0,
+  });
+  const currentTransform = useRef<MousePosition>({
+    x: 0,
+    y: 0,
+    rotateX: 0,
+    rotateY: 0,
+  });
 
   useEffect(() => {
     generateStars();
@@ -23,46 +43,72 @@ const StarBackground = () => {
       generateStars();
     };
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const animate = () => {
       if (backgroundRef.current) {
-        const { clientX, clientY } = event;
-        const moveX = (clientX - window.innerWidth / 2) * 0.03;
-        const moveY = (clientY - window.innerHeight / 2) * 0.03;
-        const rotateX = (clientY - window.innerHeight / 2) * 0.0008;
-        const rotateY = (clientX - window.innerWidth / 2) * 0.0008;
+        // Smoothly interpolate current position to target position
+        const smoothingFactor = 0.1;
+        currentTransform.current.x +=
+          (lastMousePosition.current.x - currentTransform.current.x) *
+          smoothingFactor;
+        currentTransform.current.y +=
+          (lastMousePosition.current.y - currentTransform.current.y) *
+          smoothingFactor;
+        currentTransform.current.rotateX +=
+          (lastMousePosition.current.rotateX -
+            currentTransform.current.rotateX) *
+          smoothingFactor;
+        currentTransform.current.rotateY +=
+          (lastMousePosition.current.rotateY -
+            currentTransform.current.rotateY) *
+          smoothingFactor;
 
-        // Apply transform to background
+        // Apply transform with gentle swaying
+        const swayX = Math.sin(Date.now() * 0.001) * 2;
+        const swayY = Math.cos(Date.now() * 0.001) * 2;
+
         backgroundRef.current.style.transform = `
-          translate(${moveX}px, ${moveY}px)
-          rotateX(${rotateX}deg)
-          rotateY(${rotateY}deg)
+          translate(${currentTransform.current.x + swayX}px, ${
+          currentTransform.current.y + swayY
+        }px)
+          rotateX(${currentTransform.current.rotateX}deg)
+          rotateY(${currentTransform.current.rotateY}deg)
         `;
-        backgroundRef.current.style.animationPlayState = "paused";
 
-        // Apply transform to root element for full screen effect
+        // Apply transform to root element with reduced movement
         const root = document.getElementById("root");
         if (root) {
           root.style.transform = `
-            translate(${moveX * 0.7}px, ${moveY * 0.7}px)
-            rotateX(${rotateX * 0.7}deg)
-            rotateY(${rotateY * 0.7}deg)
+            translate(${(currentTransform.current.x + swayX) * 0.5}px, ${
+            (currentTransform.current.y + swayY) * 0.5
+          }px)
+            rotateX(${currentTransform.current.rotateX * 0.5}deg)
+            rotateY(${currentTransform.current.rotateY * 0.5}deg)
           `;
         }
       }
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      const { clientX, clientY } = event;
+      const k = 2.5;
+
+      // Calculate target positions
+      lastMousePosition.current = {
+        x: ((clientX - window.innerWidth / 2) * 0.015) / k,
+        y: ((clientY - window.innerHeight / 2) * 0.015) / k,
+        rotateX: ((clientY - window.innerHeight / 2) * 0.0003) / k,
+        rotateY: ((clientX - window.innerWidth / 2) * 0.0003) / k,
+      };
     };
 
     const handleMouseLeave = () => {
-      if (backgroundRef.current) {
-        backgroundRef.current.style.transform = "";
-        backgroundRef.current.style.animationPlayState = "running";
-
-        // Reset root element transform
-        const root = document.getElementById("root");
-        if (root) {
-          root.style.transform = "";
-        }
-      }
+      // Smoothly return to center position
+      lastMousePosition.current = { x: 0, y: 0, rotateX: 0, rotateY: 0 };
     };
+
+    // Start animation loop
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
@@ -72,6 +118,9 @@ const StarBackground = () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
   }, []);
 
@@ -97,7 +146,7 @@ const StarBackground = () => {
   };
 
   const generateMeteors = () => {
-    const numberOfMeteors = 6;
+    const numberOfMeteors = 10;
     const newMeteors = [];
 
     for (let i = 0; i < numberOfMeteors; i++) {
@@ -118,7 +167,10 @@ const StarBackground = () => {
     <div
       ref={backgroundRef}
       className="fixed inset-0 overflow-hidden pointer-events-none z-0 background-container"
-      style={{ transition: "transform 0.3s ease-out" }}
+      style={{
+        transition: "transform 0.1s linear",
+        willChange: "transform",
+      }}
     >
       <div className="moon"></div>
       {stars.map((star) => (
