@@ -1,5 +1,13 @@
 import React from "react";
-import { Code, Database, Cloud, Wrench, GitBranch } from "lucide-react";
+import {
+  Code,
+  Database,
+  Cloud,
+  Wrench,
+  GitBranch,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { cn } from "../lib/utils";
 
 const getLevelColor = (level: string) => {
@@ -17,15 +25,56 @@ const getLevelColor = (level: string) => {
   }
 };
 
+const getLevelOrder = (level: string) => {
+  switch (level) {
+    case "Expert":
+      return 4;
+    case "Advanced":
+      return 3;
+    case "Intermediate":
+      return 2;
+    case "Beginner":
+      return 1;
+    default:
+      return 0;
+  }
+};
+
 const skills = [
   // Frontend Skills
-  { name: "HTML/CSS", level: "Expert", category: "Frontend", icon: Code },
-  { name: "JavaScript", level: "Advanced", category: "Frontend", icon: Code },
-  { name: "React", level: "Advanced", category: "Frontend", icon: Code },
-
+  { name: "HTML/CSS", level: "Advanced", category: "Frontend", icon: Code },
+  {
+    name: "JavaScript",
+    level: "Intermediate",
+    category: "Frontend",
+    icon: Code,
+  },
+  { name: "React", level: "Intermediate", category: "Frontend", icon: Code },
+  { name: "Tailwind CSS", level: "Beginner", category: "Frontend", icon: Code },
+  {
+    name: "TypeScript",
+    level: "Beginner",
+    category: "Frontend",
+    icon: Code,
+  },
+  {
+    name: "Bootstrap",
+    level: "Intermediate",
+    category: "Frontend",
+    icon: Code,
+  },
   // Backend Skills
   { name: "Python", level: "Advanced", category: "Backend", icon: Code },
   { name: "Java", level: "Intermediate", category: "Backend", icon: Code },
+  { name: "FastAPI", level: "Intermediate", category: "Backend", icon: Code },
+  { name: "Django", level: "Intermediate", category: "Backend", icon: Code },
+  { name: "Flask", level: "Intermediate", category: "Backend", icon: Code },
+  {
+    name: "Spring Boot",
+    level: "Intermediate",
+    category: "Backend",
+    icon: Code,
+  },
 
   // Database Skills
   { name: "SQL", level: "Advanced", category: "Database", icon: Database },
@@ -85,12 +134,29 @@ const categories = [
   "Soft Skills",
   "Languages",
 ];
+
 const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = React.useState("All");
+  const [showAllSkills, setShowAllSkills] = React.useState(false);
+  const [showAllCategories, setShowAllCategories] = React.useState(false);
+  const INITIAL_SKILLS_COUNT = 15;
+  const INITIAL_CATEGORIES_COUNT = 6;
 
-  const filteredSkills = skills.filter(
-    (skill) => activeCategory === "All" || skill.category === activeCategory
-  );
+  const filteredSkills = skills
+    .filter(
+      (skill) => activeCategory === "All" || skill.category === activeCategory
+    )
+    .sort((a, b) => getLevelOrder(b.level) - getLevelOrder(a.level));
+
+  const displayedSkills = showAllSkills
+    ? filteredSkills
+    : filteredSkills.slice(0, INITIAL_SKILLS_COUNT);
+  const hasMoreSkills = filteredSkills.length > INITIAL_SKILLS_COUNT;
+
+  const displayedCategories = showAllCategories
+    ? categories
+    : categories.slice(0, INITIAL_CATEGORIES_COUNT);
+  const hasMoreCategories = categories.length > INITIAL_CATEGORIES_COUNT;
 
   return (
     <section id="skills" className="py-24 px-4 relative bg-secondary/30">
@@ -100,24 +166,40 @@ const SkillsSection = () => {
         </h2>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category, key) => (
+          {displayedCategories.map((category, key) => (
             <button
               key={key}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => {
+                setActiveCategory(category);
+                setShowAllSkills(false);
+              }}
               className={cn(
                 "px-5 py-2 rounded-full transition-colors duration-300 capitalize",
                 activeCategory === category
                   ? "bg-primary text-primary-foreground"
-                  : "bg-secondary/70 text-foreground hover:bd-secondary"
+                  : "bg-secondary/70 text-foreground hover:bg-secondary"
               )}
             >
               {category}
             </button>
           ))}
+          {hasMoreCategories && (
+            <button
+              onClick={() => setShowAllCategories(!showAllCategories)}
+              className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary/70 text-foreground hover:bg-secondary transition-colors duration-300"
+            >
+              {showAllCategories ? "Show Less" : "More"}
+              {showAllCategories ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSkills.map((skill, index) => {
+          {displayedSkills.map((skill, index) => {
             const Icon = skill.icon;
             return (
               <div
@@ -157,6 +239,22 @@ const SkillsSection = () => {
             );
           })}
         </div>
+
+        {hasMoreSkills && (
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => setShowAllSkills(!showAllSkills)}
+              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors duration-300"
+            >
+              {showAllSkills ? "Show Less Skills" : "Show More Skills"}
+              {showAllSkills ? (
+                <ChevronUp className="h-5 w-5" />
+              ) : (
+                <ChevronDown className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
