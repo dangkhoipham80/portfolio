@@ -109,6 +109,7 @@ type ToastProps = {
   title?: string;
   description?: string;
   action?: React.ReactNode;
+  variant?: "default" | "destructive";
 };
 
 function toast({ ...props }: ToastProps) {
