@@ -15,16 +15,16 @@ const AboutMeSection = () => {
             </h3>
 
             <p className="text-muted-foreground">
-              As a 3rd-year student at FPT University, I’m passionate about web
+              As a 3rd-year student at FPT University, I'm passionate about web
               development with a strong foundation in backend technologies.
-              However, I’m now shifting my focus toward Data/AI Engineering,
+              However, I'm now shifting my focus toward Data/AI Engineering,
               combining my backend knowledge with new skills in data science,
               machine learning, and artificial intelligence.
             </p>
 
             <p className="text-muted-foreground">
               I specialize in creating scalable, efficient, and secure backend
-              systems, and now I’m excited to dive deeper into the world of
+              systems, and now I'm excited to dive deeper into the world of
               data, exploring how machine learning and AI can transform
               industries and solve complex problems. Constantly learning and
               evolving, I aim to merge my technical expertise with a keen
