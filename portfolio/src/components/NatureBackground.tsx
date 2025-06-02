@@ -1,5 +1,3 @@
-import React from "react";
-
 const clouds = [
   { style: { top: "8%", left: "2%", animationDuration: "28s" } },
   { style: { top: "12%", left: "18%", animationDuration: "32s" } },
