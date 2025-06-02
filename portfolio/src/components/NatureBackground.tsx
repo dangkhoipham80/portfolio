@@ -51,19 +51,6 @@ const birds = [
   },
 ];
 
-const treePositions = [
-  "2%",
-  "8%",
-  "15%",
-  "25%",
-  "35%",
-  "50%",
-  "65%",
-  "75%",
-  "85%",
-  "92%",
-];
-
 const NatureBackground = () => {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -118,30 +105,6 @@ const NatureBackground = () => {
           </svg>
         </div>
       ))}
-      {/* Trees (dùng hình ảnh) */}
-      {treePositions.map((left, i) => (
-        <img
-          key={i}
-          src="/assets/images/tree.svg"
-          alt="tree"
-          className="absolute"
-          style={{ left, bottom: 0, width: "70px", height: "auto", zIndex: 2 }}
-          draggable={false}
-        />
-      ))}
-      {/* Flower field (dùng hình ảnh flower.svg) */}
-      <img
-        src="/assets/images/flower.svg"
-        alt="flower field"
-        className="absolute left-0 right-0 bottom-0"
-        style={{
-          width: "100vw",
-          height: "100px",
-          objectFit: "cover",
-          zIndex: 1,
-        }}
-        draggable={false}
-      />
       <style>{`
         .dark .light-only { display: none !important; }
         @keyframes cloud-move {
