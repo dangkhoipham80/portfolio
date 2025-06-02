@@ -1,4 +1,5 @@
 import {
+  Facebook,
   Instagram,
   Linkedin,
   Mail,
@@ -11,24 +12,66 @@ import {
 import { cn } from "../lib/utils";
 import { useToast } from "../hooks/use-toast";
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
-
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      await emailjs.send(
+        "service_kyy5lxs", // Replace with your EmailJS service ID
+        "template_za2hhjj", // Replace with your EmailJS template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: "Khoi Pham",
+        },
+        "OnBzCD4-iftg0k1aZ" // Replace with your EmailJS public key
+      );
+
       toast({
         title: "Message sent!",
         description: "Thank you for your message. I'll get back to you soon.",
       });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
+
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
@@ -49,60 +92,85 @@ const ContactSection = () => {
             </h3>
 
             <div className="space-y-6 justify-center">
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Mail className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium"> Email</h4>
-                  <a
-                    href="mailto:hello@gmail.com"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    hello@gmail.com
-                  </a>
-                </div>
+              <div className="flex flex-col items-center group cursor-pointer">
+                <a
+                  href="mailto:dangkhoipham80@gmail.com"
+                  className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors mb-1"
+                >
+                  <Mail className="h-6 w-6 text-primary" />
+                </a>
+                <h4 className="font-medium text-center">Email</h4>
+                <a
+                  href="mailto:dangkhoipham80@gmail.com"
+                  className="text-muted-foreground hover:text-primary transition-colors text-center"
+                >
+                  dangkhoipham80@gmail.com
+                </a>
               </div>
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <Phone className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium"> Phone</h4>
-                  <a
-                    href="tel:+11234567890"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    +1 (123) 456-7890
-                  </a>
-                </div>
+              <div className="flex flex-col items-center group cursor-pointer">
+                <a
+                  href="tel:+84795335577"
+                  className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors mb-1"
+                >
+                  <Phone className="h-6 w-6 text-primary" />
+                </a>
+                <h4 className="font-medium text-center">Phone</h4>
+                <a
+                  href="tel:+84795335577"
+                  className="text-muted-foreground hover:text-primary transition-colors text-center"
+                >
+                  +(84) 795 335 577
+                </a>
               </div>
-              <div className="flex items-start space-x-4">
-                <div className="p-3 rounded-full bg-primary/10">
-                  <MapPin className="h-6 w-6 text-primary" />{" "}
-                </div>
-                <div>
-                  <h4 className="font-medium"> Location</h4>
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    Vancouver, BC, Canada
-                  </a>
-                </div>
+              <div className="flex flex-col items-center group cursor-pointer">
+                <a
+                  href="https://maps.google.com/?q=Ho+Chi+Minh+City,+Vietnam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors mb-1"
+                >
+                  <MapPin className="h-6 w-6 text-primary" />
+                </a>
+                <h4 className="font-medium text-center">Location</h4>
+                <a
+                  href="https://maps.google.com/?q=Ho+Chi+Minh+City,+Vietnam"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors text-center"
+                >
+                  Ho Chi Minh, Vietnam
+                </a>
               </div>
             </div>
 
             <div className="pt-8">
               <h4 className="font-medium mb-4"> Connect With Me</h4>
               <div className="flex space-x-4 justify-center">
-                <a href="#" target="_blank">
+                <a
+                  href="https://www.linkedin.com/in/khoipham4022/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Linkedin />
                 </a>
-                <a href="#" target="_blank">
+                <a href="#" target="_blank" rel="noopener noreferrer">
                   <Twitter />
                 </a>
-                <a href="#" target="_blank">
+                <a
+                  href="https://www.instagram.com/_dkhoi04/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Instagram />
                 </a>
-                <a href="#" target="_blank">
+                <a
+                  href="https://www.facebook.com/dang.khoi.344669"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Facebook />
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer">
                   <Twitch />
                 </a>
               </div>
@@ -129,8 +197,10 @@ const ContactSection = () => {
                   id="name"
                   name="name"
                   required
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                  placeholder="Pedro Machado..."
+                  placeholder="Enter your name..."
                 />
               </div>
 
@@ -147,8 +217,10 @@ const ContactSection = () => {
                   id="email"
                   name="email"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
-                  placeholder="john@gmail.com"
+                  placeholder="Enter your email..."
                 />
               </div>
 
@@ -164,6 +236,8 @@ const ContactSection = () => {
                   id="message"
                   name="message"
                   required
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
                   placeholder="Hello, I'd like to talk about..."
                 />
