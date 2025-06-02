@@ -186,26 +186,20 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 120 60% 90%; /* Xanh lá cây nhạt */
     --foreground: 222 47% 11%;
-
     --card: 0 0% 100%;
-
-    --primary: 250 47% 60%;
+    --primary: 120 60% 40%; /* Xanh lá cây đậm */
     --primary-foreground: 210 40% 98%;
-
-    --border: 214 32% 91%;
+    --border: 120 60% 70%;
   }
 
   .dark {
     --background: 222 47% 4%;
     --foreground: 213 31% 91%;
-
     --card: 222 47% 8%;
-
     --primary: 250 65% 65%;
     --primary-foreground: 213 31% 91%;
-
     --border: 217 33% 20%;
   }
 
@@ -220,11 +214,16 @@
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply text-foreground transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
     width: 100%;
     height: 100%;
     overflow-x: hidden;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #b7e7a0 0%, #7ec850 100%) !important;
+  }
+  .dark body {
+    background: hsl(var(--background)) !important;
   }
 }
 
