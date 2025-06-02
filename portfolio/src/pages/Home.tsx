@@ -5,8 +5,11 @@ import MainSection from "../components/MainSection";
 import AboutMeSection from "../components/AboutMeSection";
 import SkillsSection from "../components/SkillsSection";
 import Footer from "../components/Footer";
+import ScrollIndicator from "../components/ScrollIndicator";
+import { useRef } from "react";
 
 const Home = () => {
+  const footerRef = useRef<HTMLDivElement>(null);
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
       {/* Theme Toggle */}
@@ -26,7 +29,10 @@ const Home = () => {
       </main>
 
       {/* Footer */}
-      <Footer />
+      <Footer ref={footerRef} />
+
+      {/* Scroll Indicator */}
+      <ScrollIndicator footerRef={footerRef} targetId="#about" />
     </div>
   );
 };
