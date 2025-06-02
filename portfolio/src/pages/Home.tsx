@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import MainSection from "../components/MainSection";
 import AboutMeSection from "../components/AboutMeSection";
 import SkillsSection from "../components/SkillsSection";
+import Footer from "../components/Footer";
 
 const Home = () => {
   return (
@@ -25,6 +26,7 @@ const Home = () => {
       </main>
 
       {/* Footer */}
+      <Footer />
     </div>
   );
 };
