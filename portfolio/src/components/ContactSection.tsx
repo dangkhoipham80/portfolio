@@ -6,8 +6,6 @@ import {
   MapPin,
   Phone,
   Send,
-  Twitch,
-  Twitter,
   Code2,
 } from "lucide-react";
 import { cn } from "../lib/utils";
