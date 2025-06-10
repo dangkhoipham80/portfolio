@@ -1,7 +1,18 @@
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const MainSection = () => {
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const titles = ["Phạm Đăng Khôi", "Back End Developer", "Data Engineering"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTitleIndex((prev) => (prev + 1) % titles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToProjects = () => {
     const projectsSection = document.getElementById("projects");
     if (projectsSection) {
@@ -36,9 +47,9 @@ const MainSection = () => {
   return (
     <section
       id="/"
-      className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden pt-20"
     >
-      <div className="container max-w-4xl mx-auto text-center z-10">
+      <div className="container max-w-4xl mx-auto text-center z-10 mt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,44 +71,18 @@ const MainSection = () => {
                 animate="visible"
                 className="overflow-hidden whitespace-nowrap"
               >
-                <motion.span
-                  className="text-primary inline-block"
-                  animate={{
-                    textShadow: [
-                      "0 0 7px rgba(var(--primary), 0.3)",
-                      "0 0 10px rgba(var(--primary), 0.5)",
-                      "0 0 7px rgba(var(--primary), 0.3)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                >
-                  Phạm
-                </motion.span>{" "}
-                <motion.span
-                  className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent inline-block"
-                  animate={{
-                    backgroundPosition: ["0%", "100%", "0%"],
-                    filter: [
-                      "brightness(1)",
-                      "brightness(1.2)",
-                      "brightness(1)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    backgroundSize: "200% auto",
-                  }}
-                >
-                  Đăng Khôi
-                </motion.span>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentTitleIndex}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent inline-block"
+                  >
+                    {titles[currentTitleIndex]}
+                  </motion.span>
+                </AnimatePresence>
               </motion.div>
               <motion.span
                 variants={cursorVariants}
@@ -108,18 +93,31 @@ const MainSection = () => {
             </div>
           </motion.h1>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-mono"
           >
-            I'm a Full-Stack Developer with a strong passion for backend
-            development. While I work across the entire stack, my focus is on
-            building efficient, scalable, and secure server-side systems. I love
-            exploring new technologies and improving my problem-solving skills,
-            especially through challenges on LeetCode.
-          </motion.p>
+            <div className="bg-background/50 backdrop-blur-sm p-6 rounded-xl border border-foreground/10">
+              <pre className="text-left whitespace-pre-wrap">
+                {`const developer = {
+  role: "Full-Stack Developer",
+  focus: "Backend Development",
+  skills: [
+    "Efficient Systems",
+    "Scalable Architecture",
+    "Secure Solutions"
+  ],
+  passion: [
+    "New Technologies",
+    "Problem Solving",
+    "LeetCode Challenges"
+  ]
+};`}
+              </pre>
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -165,31 +163,31 @@ const MainSection = () => {
               </motion.a>
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="flex flex-col items-center mt-10 mb-4"
+          >
+            <motion.div
+              animate={{
+                y: [0, 10, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+              className="flex flex-col items-center"
+            >
+              <span className="text-sm text-muted-foreground mb-2">Scroll</span>
+              <ArrowDown className="h-5 w-5 text-primary" />
+            </motion.div>
+          </motion.div>
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-      >
-        <motion.div
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          className="flex flex-col items-center"
-        >
-          <span className="text-sm text-muted-foreground mb-2">Scroll</span>
-          <ArrowDown className="h-5 w-5 text-primary" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 };
