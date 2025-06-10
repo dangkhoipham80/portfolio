@@ -58,7 +58,12 @@ const birds = [
 
 const NatureBackground = () => {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div
+      className="fixed inset-0 overflow-hidden pointer-events-none z-0"
+      style={{
+        background: "linear-gradient(to bottom, #87ceeb 0%, #e0f7fa 100%)",
+      }}
+    >
       {/* Sun */}
       <div
         className="absolute light-only"
@@ -116,6 +121,7 @@ const NatureBackground = () => {
       ))}
       <style>{`
         .dark .light-only { display: none !important; }
+        .light .light-only { display: block !important; opacity: 1 !important; filter: none !important; }
         
         @keyframes cloud-move {
           0% { transform: translateX(0) scale(var(--scale, 1)); }

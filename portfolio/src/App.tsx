@@ -4,11 +4,10 @@ import NotFound from "./pages/NotFound";
 import StarBackground from "./components/StarBackground";
 import NatureBackground from "./components/NatureBackground";
 import CareerJourney from "./pages/CareerJourney";
+import { useTheme } from "./components/ThemeContext";
 
 function App() {
-  const isDarkMode =
-    typeof window !== "undefined" &&
-    document.documentElement.classList.contains("dark");
+  const { isDarkMode } = useTheme();
   return (
     <>
       {isDarkMode ? <StarBackground /> : <NatureBackground />}
