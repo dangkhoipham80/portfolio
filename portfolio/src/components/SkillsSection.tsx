@@ -161,9 +161,12 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          My <span className="text-primary">Skills</span>
-        </h2>
+        <div className="flex flex-col items-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent text-center">
+            My Skills
+          </h2>
+          <div className="h-1 w-24 bg-gradient-to-r from-primary/60 via-primary/80 to-primary rounded-full mt-3 animate-pulse" />
+        </div>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {displayedCategories.map((category, key) => (
@@ -174,10 +177,10 @@ const SkillsSection = () => {
                 setShowAllSkills(false);
               }}
               className={cn(
-                "px-5 py-2 rounded-full transition-colors duration-300 capitalize",
+                "px-5 py-2 rounded-full font-mono text-sm font-semibold border border-primary/30 bg-background/60 hover:bg-primary/10 transition-all duration-300 capitalize shadow-sm",
                 activeCategory === category
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary/70 text-foreground hover:bg-secondary"
+                  ? "bg-gradient-to-r from-primary/80 to-primary text-primary-foreground border-primary shadow-md scale-105"
+                  : "text-primary hover:scale-105"
               )}
             >
               {category}
@@ -186,7 +189,7 @@ const SkillsSection = () => {
           {hasMoreCategories && (
             <button
               onClick={() => setShowAllCategories(!showAllCategories)}
-              className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary/70 text-foreground hover:bg-secondary transition-colors duration-300"
+              className="flex items-center gap-2 px-5 py-2 rounded-full font-mono text-sm font-semibold border border-primary/30 bg-background/60 hover:bg-primary/10 transition-all duration-300 shadow-sm"
             >
               {showAllCategories ? "Show Less" : "More"}
               {showAllCategories ? (
@@ -198,25 +201,25 @@ const SkillsSection = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedSkills.map((skill, index) => {
             const Icon = skill.icon;
             return (
               <div
                 key={index}
-                className="gradient-border p-6 rounded-lg card-hover group"
+                className="gradient-border p-6 rounded-2xl card-hover group bg-background/80 shadow-lg transition-all duration-300 flex flex-col h-full"
               >
-                <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                    <Icon className="h-6 w-6 text-primary" />
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="flex-shrink-0 p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                    <Icon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-lg truncate">
+                      <h3 className="font-mono font-bold text-lg truncate text-primary">
                         {skill.name}
                       </h3>
                       <span
-                        className={`text-sm font-medium ml-2 whitespace-nowrap ${getLevelColor(
+                        className={`text-xs font-mono font-semibold ml-2 whitespace-nowrap ${getLevelColor(
                           skill.level
                         )}`}
                       >
@@ -225,11 +228,18 @@ const SkillsSection = () => {
                     </div>
                     <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
                       <div
-                        className="bg-primary h-2 rounded-full origin-left transition-all duration-1000 ease-out"
+                        className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 h-2 rounded-full origin-left animate-grow"
                         style={{
-                          width: "0%",
-                          animation: `grow 1.5s ease-out forwards`,
+                          width:
+                            skill.level === "Expert"
+                              ? "100%"
+                              : skill.level === "Advanced"
+                              ? "80%"
+                              : skill.level === "Intermediate"
+                              ? "60%"
+                              : "40%",
                           animationDelay: `${index * 0.1}s`,
+                          animationDuration: "1.5s",
                         }}
                       />
                     </div>
@@ -241,10 +251,10 @@ const SkillsSection = () => {
         </div>
 
         {hasMoreSkills && (
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-10">
             <button
               onClick={() => setShowAllSkills(!showAllSkills)}
-              className="flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors duration-300"
+              className="cosmic-button flex items-center gap-2 text-lg font-mono px-6 py-3"
             >
               {showAllSkills ? "Show Less Skills" : "Show More Skills"}
               {showAllSkills ? (
