@@ -1,15 +1,24 @@
 @import "tailwindcss";
 
 @theme {
+  /* Biến màu sắc */
   --color-border: hsl(var(--border));
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
-
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-
   --color-card: hsl(var(--card));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-ring: hsl(var(--ring));
 
+  /* Định nghĩa animations */
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite;
   --animate-fade-in: fade-in 0.7s ease-out forwards;
@@ -25,7 +34,9 @@
   --animate-bounce-subtle: bounce-subtle 1s ease-in-out infinite;
   --animate-bounce-in: bounce-in 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)
     forwards;
+  --animate-spin-slow: spin 20s linear infinite; /* Animation mới */
 
+  /* Keyframes */
   @keyframes float {
     0%,
     100% {
@@ -35,6 +46,7 @@
       transform: translateY(-10px);
     }
   }
+
   @keyframes pulse-subtle {
     0%,
     100% {
@@ -44,6 +56,7 @@
       opacity: 0.8;
     }
   }
+
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -54,19 +67,21 @@
       transform: translateY(0);
     }
   }
+
   @keyframes meteor {
     0% {
-      transform: translate(0, 0) rotate(0deg);
+      transform: translate(0, 0) rotate(25deg);
       opacity: 0;
     }
     10% {
       opacity: 1;
     }
     100% {
-      transform: translate(200vw, 200vh) rotate(0deg);
+      transform: translate(150vw, 150vh) rotate(25deg);
       opacity: 0;
     }
   }
+
   @keyframes star-move {
     0% {
       transform: translate(0, 0);
@@ -75,17 +90,19 @@
       transform: translate(10px, 10px);
     }
   }
+
   @keyframes meteor-sparkle {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.9;
-    }
+    0%,
     100% {
       opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(0.9);
     }
   }
+
   @keyframes background-pan {
     0% {
       transform: translate(0, 0) rotate(0deg);
@@ -103,6 +120,7 @@
       transform: translate(0, 0) rotate(0deg);
     }
   }
+
   @keyframes sway {
     0% {
       transform: translate(0, 0) rotate(0deg);
@@ -120,6 +138,7 @@
       transform: translate(0, 0) rotate(0deg);
     }
   }
+
   @keyframes bounce-subtle {
     0%,
     100% {
@@ -129,6 +148,7 @@
       transform: translateY(-8px);
     }
   }
+
   @keyframes bounce-in {
     0% {
       opacity: 0;
@@ -148,46 +168,55 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }
 
-.moon {
-  position: absolute;
-  top: 8%;
-  right: 8%;
-  width: 100px;
-  height: 100px;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  box-shadow: 0 0 30px 7px rgba(224, 224, 224, 0.6);
-  z-index: 0; /* Moon is part of the StarBackground, so its z-index relative to StarBackground's container */
-  animation: var(--animate-sway);
-  animation-play-state: running;
-  will-change: transform;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  display: none; /* Hide by default */
-}
-
-.dark .moon {
-  display: block; /* Show only in dark mode */
-}
-
+/* Các lớp cơ bản và biến màu sắc */
 @layer base {
   :root {
-    --background: 120 60% 90%; /* Xanh lá cây nhạt */
+    /* Chế độ sáng (Light Mode) */
+    --background: 120 60% 95%; /* Xanh lá cây nhạt hơn, dịu hơn */
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --primary: 120 60% 40%; /* Xanh lá cây đậm */
+    --primary: 120 60% 35%; /* Xanh lá cây đậm, hơi khử bão hòa */
     --primary-foreground: 210 40% 98%;
-    --border: 120 60% 70%;
+    --border: 120 20% 80%; /* Đường viền nhẹ nhàng hơn */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 222 47% 11%;
   }
 
   .dark {
-    --background: 222 47% 4%;
+    /* Chế độ tối (Dark Mode) */
+    --background: 222 47% 4%; /* Nền rất tối */
     --foreground: 213 31% 91%;
     --card: 222 47% 8%;
-    --primary: 250 65% 65%;
+    --primary: 250 65% 65%; /* Tím sống động */
     --primary-foreground: 213 31% 91%;
     --border: 217 33% 20%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 213 31% 91%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 217.2 32.6% 17.5%;
   }
 
   * {
@@ -202,18 +231,30 @@
 
   body {
     @apply text-foreground transition-colors duration-300;
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Thêm font stack hiện đại */
     font-feature-settings: "rlig" 1, "calt" 1;
     width: 100%;
     height: 100%;
     overflow-x: hidden;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #b7e7a0 0%, #7ec850 100%) !important;
+    line-height: 1.6; /* Cải thiện khả năng đọc */
+    /* Gradient nền cho light mode */
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.8) 100%
+    ) !important;
   }
+
   .dark body {
-    background: hsl(var(--background)) !important;
+    background: hsl(
+      var(--background)
+    ) !important; /* Nền đồng nhất trong dark mode */
   }
 }
 
+/* Container responsive */
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
@@ -235,53 +276,95 @@
   }
 }
 
+/* Hiệu ứng văn bản phát sáng */
 @utility text-glow {
   @apply relative;
-  text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+  text-shadow: 0 0 15px hsl(var(--primary) / 0.7),
+    0 0 30px hsl(var(--primary-foreground) / 0.5);
+  animation: pulse-subtle 3s ease-in-out infinite alternate,
+    fade-in 1s ease-out forwards;
 }
 
+/* Hiệu ứng hover cho card */
 @utility card-hover {
-  @apply transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg;
+  @apply transition-all duration-300 hover:scale-[1.02];
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Bóng đổ cơ bản */
 }
 
+.dark .card-hover:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 25px hsl(var(--primary) / 0.5); /* Hiệu ứng glow mạnh hơn trong dark mode */
+}
+
+/* Viền gradient */
 @utility gradient-border {
-  @apply relative rounded-md;
+  @apply relative rounded-lg; /* Góc bo tròn hơn */
   background: linear-gradient(to right, hsl(var(--card)), hsl(var(--card)));
   background-clip: padding-box;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
+  border-image: linear-gradient(
+      45deg,
+      hsl(var(--primary) / 0.7),
+      hsl(var(--border)),
+      hsl(var(--primary) / 0.7)
+    )
+    1;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
 }
 
+.dark .gradient-border {
+  border-image: linear-gradient(
+      45deg,
+      hsl(var(--primary) / 0.9),
+      hsl(var(--border) / 0.7),
+      hsl(var(--primary) / 0.9)
+    )
+    1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Bóng đổ mạnh hơn trong dark mode */
+}
+
+/* Nút bấm kiểu vũ trụ */
 @utility cosmic-button {
-  @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium
-          transition-all duration-300 hover:shadow-[0_0_10px_rgba(139,92,246,0.5)]
-          hover:scale-105 active:scale-95;
+  @apply px-8 py-3 rounded-full bg-primary text-primary-foreground font-semibold
+    transition-all duration-300 ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  &:hover {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.7),
+      0 0 30px hsl(var(--primary) / 0.3);
+    transform: scale(1.08) translateY(-2px);
+  }
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
 }
 
-/* Original @utility star definition - used by StarBackground.tsx */
+/* Các ngôi sao */
 @utility star {
   @apply absolute rounded-full bg-white;
-  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
-  animation: var(--animate-pulse-subtle), var(--animate-star-move);
-  width: 3px;
-  height: 3px;
-  z-index: 5; /* Relative to its parent StarBackground container (z-0) */
+  box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.6);
+  animation: var(--animate-pulse-subtle) 2s ease-in-out infinite alternate,
+    var(--animate-star-move) 20s ease-in-out infinite alternate;
+  width: 2px;
+  height: 2px;
+  z-index: 5;
 }
 
-/* Original @utility meteor definition - used by StarBackground.tsx */
+/* Các sao băng */
 @utility meteor {
   @apply absolute;
   background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
-  box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.5);
-  animation: var(--animate-meteor), var(--animate-meteor-sparkle);
-  width: 80px;
-  height: 2px;
-  border-radius: 1px;
+  box-shadow: 0 0 15px 6px rgba(255, 255, 255, 0.7);
+  animation: var(--animate-meteor),
+    var(--animate-meteor-sparkle) 4s ease-in-out infinite alternate;
+  width: 100px;
+  height: 3px;
+  border-radius: 2px;
   transform: rotate(0deg);
   transform-origin: 0% 50%;
-  z-index: 1; /* Relative to its parent StarBackground container (z-0) */
+  z-index: 1;
 }
 
-/* New utilities specifically for the 404 page content */
+/* Các tiện ích mới cho trang 404 */
 @utility text-glow-404 {
   @apply relative;
   text-shadow: 0 0 15px hsl(var(--primary)),
@@ -295,6 +378,7 @@
   animation-delay: 0.5s;
 }
 
+/* Cấu trúc chính */
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -303,16 +387,77 @@
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
   perspective: 1000px;
-  /* Ensure #root has a z-index if it's meant to be below specific elements */
-  /* If Navbar/ThemeToggle are outside #root, this might not be relevant for their z-index */
+  position: relative; /* Đảm bảo z-index hoạt động đúng */
+  z-index: 1; /* Giúp nội dung nằm trên nền */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Container nền */
 .background-container {
-  /* This is the container for StarBackground.tsx */
+  position: fixed; /* Cố định vị trí trên viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   animation: var(--animate-background-pan);
   animation-play-state: running;
   transform-origin: center center;
   will-change: transform;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 0; /* Explicitly set z-index for the background */
+  z-index: 0; /* Đặt nền ở lớp dưới cùng */
+  pointer-events: none; /* Không tương tác với chuột */
+}
+
+/* Mặt trăng */
+.moon {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  width: 120px; /* Mặt trăng lớn hơn */
+  height: 120px;
+  background-color: #f0f0f0; /* Màu nền sáng hơn */
+  border-radius: 50%;
+  box-shadow: 0 0 40px 10px rgba(240, 240, 240, 0.7),
+    inset 0 0 15px rgba(0, 0, 0, 0.2); /* Bóng đổ bên trong tạo chiều sâu */
+  z-index: 0;
+  animation: var(--animate-sway), pulse-subtle 5s ease-in-out infinite alternate,
+    var(--animate-spin-slow); /* Thêm animation xoay chậm */
+  animation-play-state: running;
+  will-change: transform, opacity;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s ease-in-out;
+  display: none; /* Ẩn theo mặc định */
+}
+
+/* Các miệng núi lửa trên mặt trăng */
+.moon::before,
+.moon::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(180, 180, 180, 0.3);
+  border-radius: 50%;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.moon::before {
+  width: 25px;
+  height: 25px;
+  top: 20%;
+  left: 25%;
+  transform: rotate(10deg);
+}
+
+.moon::after {
+  width: 15px;
+  height: 15px;
+  bottom: 30%;
+  right: 20%;
+  transform: rotate(-15deg);
+}
+
+/* Chỉ hiển thị mặt trăng trong dark mode */
+.dark .moon {
+  display: block;
 }
