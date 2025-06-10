@@ -1,6 +1,7 @@
 import { cn } from "../lib/utils";
 import { useEffect, useState, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 const navItems = [
   { name: "Home", path: "#" },
@@ -26,7 +27,11 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const fullText = "Phạm Đăng Khôi";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,25 +56,69 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (isWaiting) {
+      timeout = setTimeout(() => {
+        setIsWaiting(false);
+        setIsDeleting(true);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting) {
+      if (displayText === "") {
+        setIsDeleting(false);
+        setIsWaiting(true);
+      } else {
+        timeout = setTimeout(() => {
+          setDisplayText((prev) => prev.slice(0, -1));
+        }, 100);
+      }
+    } else {
+      if (displayText === fullText) {
+        setIsWaiting(true);
+      } else {
+        timeout = setTimeout(() => {
+          setDisplayText(fullText.slice(0, displayText.length + 1));
+        }, 150);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, isWaiting, fullText]);
+
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
       className={cn(
         "fixed w-full z-40 transition-all duration-300",
         isScrolled
-          ? "py-3 bg-background/80 backdrop-blur-lg border-b border-foreground/10 shadow-xs"
+          ? "py-3 bg-background/80 backdrop-blur-lg border-b border-foreground/10 shadow-lg"
           : "py-5"
       )}
     >
       <div className="container flex items-center justify-between">
-        <a
-          className="text-xl font-bold text-primary flex items-center"
+        <motion.a
+          whileHover={{ scale: 1.02 }}
+          className="text-xl font-bold flex items-center gap-2"
           href="/"
         >
-          <span className="relative z-10">
-            <span className="text-glow text-foreground">Pham Dang Khoi</span>{" "}
-            Portfolio
+          <span className="relative">
+            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent font-mono">
+              {displayText}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+                className="inline-block w-[2px] h-[1em] bg-primary ml-[2px]"
+              />
+            </span>
+            <span className="text-foreground/80 ml-2">Portfolio</span>
           </span>
-        </a>
+        </motion.a>
 
         {/* desktop navigation */}
         <div className="hidden md:flex items-center space-x-8">
@@ -148,7 +197,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
