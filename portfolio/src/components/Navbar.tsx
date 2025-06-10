@@ -27,7 +27,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const mobileMenuRef = useRef<HTMLDivElement>(null); // Ref for mobile menu container
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,13 +44,10 @@ const Navbar = () => {
       }
 
       // Close mobile menu if click outside and menu is open
-      // AND the click target is not the mobile menu toggle button
       if (
         isMenuOpen &&
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node) &&
         !(event.target as HTMLElement).closest(
-          'button[aria-label="Open Menu"], button[aria-label="Close Menu"]'
+          'button[aria-label="Open Menu"], button[aria-label="Close Menu"], nav'
         )
       ) {
         setIsMenuOpen(false);
@@ -156,35 +152,25 @@ const Navbar = () => {
         </button>
 
         {/* mobile navigation overlay */}
-        {/* Only render the mobile menu if it's open or transitioning to open/close */}
-        {/* Added bg-background/95 and flex/items-center/justify-center for full screen dark background and centered content */}
-        {/* Ensure its content is visible and centered */}
-        {(isMenuOpen || mobileMenuRef.current) && (
+        {isMenuOpen && (
           <div
-            ref={mobileMenuRef} // Assign ref to the mobile menu container
-            className={cn(
-              "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center", // Ensure flexbox properties for centering
-              "transition-transform duration-300 md:hidden",
-              isMenuOpen ? "translate-x-0" : "translate-x-full"
-            )}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-background/95 backdrop-blur-md md:hidden"
           >
-            {/* Close button inside the mobile menu */}
             <button
               onClick={toggleMobileMenu}
-              className="absolute top-5 right-5 p-2 text-foreground z-50"
+              className="absolute top-5 right-5 p-2 text-foreground"
               aria-label="Close Menu"
             >
               <X size={24} />
             </button>
             <div className="flex flex-col space-y-8 text-xl text-center">
-              {/* Only show primary nav items on mobile */}
               {navItems
                 .filter((item) => !item.items)
                 .map((item, key) => (
                   <a
                     key={key}
                     href={item.path || "#"}
-                    className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                    className="text-foreground hover:text-primary transition-colors duration-300"
                     onClick={handleMobileNavLinkClick}
                   >
                     {item.name}
