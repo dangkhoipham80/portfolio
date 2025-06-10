@@ -35,8 +35,9 @@ const Navbar = () => {
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      // Close desktop dropdown if click outside
+      // Close desktop dropdown if click outside (only when mobile menu is closed)
       if (
+        !isMenuOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
@@ -145,10 +146,13 @@ const Navbar = () => {
         {/* mobile nav toggle button (hamburger/X icon) */}
         <button
           onClick={toggleMobileMenu}
-          className="md:hidden p-2 text-foreground z-50"
+          className={cn(
+            "md:hidden p-2 text-foreground z-50",
+            isMenuOpen && "hidden"
+          )}
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
+          <Menu size={24} />
         </button>
 
         {/* mobile navigation overlay */}
@@ -164,7 +168,7 @@ const Navbar = () => {
               isMenuOpen ? "translate-x-0" : "translate-x-full"
             )}
           >
-            {/* Close button inside the mobile menu - one of the 'X's you see */}
+            {/* Close button inside the mobile menu */}
             <button
               onClick={toggleMobileMenu}
               className="absolute top-5 right-5 p-2 text-foreground z-50"
