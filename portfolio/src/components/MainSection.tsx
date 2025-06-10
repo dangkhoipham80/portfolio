@@ -1,5 +1,8 @@
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
+const typingWords = ["Dang Khoi Pham", "AI Engineering", "BackEnd Developer"];
 
 const MainSection = () => {
   const containerVariants = {
@@ -30,6 +33,33 @@ const MainSection = () => {
     }
   };
 
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [typing, setTyping] = useState(true);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (typing) {
+      if (displayed.length < typingWords[wordIndex].length) {
+        timeout = setTimeout(() => {
+          setDisplayed(typingWords[wordIndex].slice(0, displayed.length + 1));
+        }, 80);
+      } else {
+        timeout = setTimeout(() => setTyping(false), 1200);
+      }
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayed(displayed.slice(0, -1));
+        }, 40);
+      } else {
+        setTyping(true);
+        setWordIndex((prev) => (prev + 1) % typingWords.length);
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, typing, wordIndex]);
+
   return (
     <section
       id="/"
@@ -45,21 +75,10 @@ const MainSection = () => {
           <motion.h1 className="text-4xl md:text-6xl font-bold tracking-tight font-mono">
             <span className="inline-block">Hi,</span>{" "}
             <span className="inline-block">I'm</span>{" "}
-            <div className="inline-flex items-center">
-              <motion.div className="overflow-hidden whitespace-nowrap">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -20, opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent inline-block"
-                  >
-                    Dang Khoi Pham
-                  </motion.span>
-                </AnimatePresence>
-              </motion.div>
-            </div>
+            <span className="inline-block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent min-w-[12ch]">
+              {displayed}
+              <span className="inline-block animate-pulse">|</span>
+            </span>
           </motion.h1>
 
           <motion.div className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-mono">
@@ -67,7 +86,7 @@ const MainSection = () => {
               <pre className="text-left whitespace-pre-wrap">
                 {`const developer = {
   role: "Full-Stack Developer",
-  focus: "Backend Development",
+  focus: ["Backend Development", "AI Engineering"],
   skills: [
     "Efficient Systems",
     "Scalable Architecture",
