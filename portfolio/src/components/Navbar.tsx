@@ -35,8 +35,9 @@ const Navbar = () => {
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      // Close desktop dropdown if click outside
+      // Close desktop dropdown if click outside (only when mobile menu is closed)
       if (
+        !isMenuOpen &&
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
@@ -145,10 +146,13 @@ const Navbar = () => {
         {/* mobile nav toggle button (hamburger/X icon) */}
         <button
           onClick={toggleMobileMenu}
-          className="md:hidden p-2 text-foreground z-50"
+          className={cn(
+            "md:hidden p-2 text-foreground z-50",
+            isMenuOpen && "hidden"
+          )}
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
+          <Menu size={24} />
         </button>
 
         {/* mobile navigation overlay */}
@@ -164,7 +168,7 @@ const Navbar = () => {
               isMenuOpen ? "translate-x-0" : "translate-x-full"
             )}
           >
-            {/* Close button inside the mobile menu - one of the 'X's you see */}
+            {/* Close button inside the mobile menu */}
             <button
               onClick={toggleMobileMenu}
               className="absolute top-5 right-5 p-2 text-foreground z-50"
@@ -173,41 +177,10 @@ const Navbar = () => {
               <X size={24} />
             </button>
             <div className="flex flex-col space-y-8 text-xl text-center">
-              {" "}
-              {/* Added text-center here */}
-              {navItems.map((item, key) =>
-                item.items ? (
-                  // Handle "More" dropdown for mobile
-                  <div key={key} className="text-center">
-                    <button
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="text-foreground/80 hover:text-primary transition-colors duration-300 flex items-center justify-center gap-1 mx-auto"
-                    >
-                      {item.name}
-                      <ChevronDown
-                        size={16}
-                        className={cn(
-                          "transition-transform duration-200",
-                          isDropdownOpen ? "rotate-180" : ""
-                        )}
-                      />
-                    </button>
-                    {isDropdownOpen && (
-                      <div className="flex flex-col items-center space-y-4 mt-4">
-                        {item.items.map((subItem, subKey) => (
-                          <a
-                            key={subKey}
-                            href={subItem.path}
-                            className="text-foreground/70 hover:text-primary transition-colors duration-300 text-base"
-                            onClick={handleMobileNavLinkClick}
-                          >
-                            {subItem.name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
+              {/* Only show primary nav items on mobile */}
+              {navItems
+                .filter((item) => !item.items)
+                .map((item, key) => (
                   <a
                     key={key}
                     href={item.path || "#"}
@@ -216,8 +189,7 @@ const Navbar = () => {
                   >
                     {item.name}
                   </a>
-                )
-              )}
+                ))}
             </div>
           </div>
         )}
