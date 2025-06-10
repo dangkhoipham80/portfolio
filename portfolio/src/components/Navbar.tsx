@@ -29,7 +29,6 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fullText = "Phạm Đăng Khôi";
 
@@ -59,35 +58,26 @@ const Navbar = () => {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
-    if (isWaiting) {
-      timeout = setTimeout(() => {
-        setIsWaiting(false);
-        setIsDeleting(true);
-      }, 2000);
-      return () => clearTimeout(timeout);
-    }
-
     if (isDeleting) {
       if (displayText === "") {
         setIsDeleting(false);
-        setIsWaiting(true);
       } else {
         timeout = setTimeout(() => {
           setDisplayText((prev) => prev.slice(0, -1));
-        }, 100);
+        }, 50);
       }
     } else {
       if (displayText === fullText) {
-        setIsWaiting(true);
+        setIsDeleting(true);
       } else {
         timeout = setTimeout(() => {
           setDisplayText(fullText.slice(0, displayText.length + 1));
-        }, 150);
+        }, 500);
       }
     }
 
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, isWaiting, fullText]);
+  }, [displayText, isDeleting, fullText]);
 
   return (
     <motion.nav

@@ -13,6 +13,13 @@ interface Star {
   isPulsing?: boolean;
   isTwinkling?: boolean;
   glowSize?: number;
+  isFalling?: boolean;
+  fallSpeed?: number;
+  fallDelay?: number;
+  swayAmount?: number;
+  isBreathing?: boolean;
+  breathingDuration?: number;
+  breathingDelay?: number;
 }
 
 interface MousePosition {
@@ -24,7 +31,6 @@ interface MousePosition {
 
 const StarBackground = () => {
   const [stars, setStars] = useState<Star[]>([]);
-  const [meteors, setMeteors] = useState<Star[]>([]);
   const backgroundRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const lastMousePosition = useRef<MousePosition>({
@@ -42,12 +48,9 @@ const StarBackground = () => {
 
   useEffect(() => {
     generateStars();
-    generateMeteors();
-
     const handleResize = () => {
       generateStars();
     };
-
     const animate = () => {
       if (backgroundRef.current) {
         const smoothingFactor = 0.1;
@@ -76,7 +79,6 @@ const StarBackground = () => {
           rotateX(${currentTransform.current.rotateX}deg)
           rotateY(${currentTransform.current.rotateY}deg)
         `;
-
         const root = document.getElementById("root");
         if (root) {
           root.style.transform = `
@@ -94,7 +96,6 @@ const StarBackground = () => {
     const handleMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const k = 2.5;
-
       lastMousePosition.current = {
         x: ((clientX - window.innerWidth / 2) * 0.015) / k,
         y: ((clientY - window.innerHeight / 2) * 0.015) / k,
@@ -108,7 +109,6 @@ const StarBackground = () => {
     };
 
     animationFrameRef.current = requestAnimationFrame(animate);
-
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", handleMouseLeave);
@@ -127,7 +127,6 @@ const StarBackground = () => {
     const numberOfStars = Math.floor(
       (window.innerWidth * window.innerHeight) / 2000
     );
-
     const starColors = [
       "#ffffff", // White
       "#fff7e6", // Warm white
@@ -142,53 +141,60 @@ const StarBackground = () => {
     ];
 
     const newStars = [];
-
     for (let i = 0; i < numberOfStars; i++) {
       const size = Math.random() * 2 + 0.5;
       const isPulsing = Math.random() > 0.7;
       const isTwinkling = Math.random() > 0.5;
+      const isFalling = Math.random() > 0.7;
+      const fallSpeed = Math.random() * 3 + 2;
+      const fallDelay = Math.random() * 5;
+      const swayAmount = Math.random() * 50 + 25;
+
+      // Breathing stars (non-falling)
+      const isColored = !isFalling;
+      const isBreathing = isColored; // All colored stars will breathe
+      const breathingDuration = Math.random() * 2 + 2.5; // 2.5s - 4.5s
+      const breathingDelay = Math.random() * 3; // random delay
+
+      // Select stars to glow more prominently
+      const glowSize =
+        Math.random() > 0.8
+          ? size * (Math.random() * 3 + 2)
+          : size * (Math.random() * 1 + 1);
+      const opacity = isFalling
+        ? Math.random() * 0.5 + 0.5
+        : Math.random() * 0.7 + 0.3;
 
       newStars.push({
         id: i,
         size,
         x: Math.random() * 100,
-        y: Math.random() * 100,
-        opacity: Math.random() * 0.7 + 0.3,
+        y: isFalling ? -5 : Math.random() * 100,
+        opacity,
         animationDuration: Math.random() * 3 + 1,
         twinkleSpeed: Math.random() * 1.5 + 0.5,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
+        color: isFalling
+          ? "#ffffff"
+          : starColors[Math.floor(Math.random() * starColors.length)],
         isPulsing,
         isTwinkling,
-        glowSize: size * (Math.random() * 3 + 2),
+        glowSize,
+        isFalling,
+        fallSpeed,
+        fallDelay,
+        swayAmount,
+        isBreathing,
+        breathingDuration,
+        breathingDelay,
       });
     }
 
     setStars(newStars);
   };
 
-  const generateMeteors = () => {
-    const numberOfMeteors = 25;
-    const newMeteors = [];
-
-    for (let i = 0; i < numberOfMeteors; i++) {
-      newMeteors.push({
-        id: i,
-        size: Math.random() * 2 + 1,
-        x: Math.random() * 100,
-        y: Math.random() * -30,
-        delay: Math.random() * 20 + 5,
-        animationDuration: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.7 + 0.3,
-      });
-    }
-
-    setMeteors(newMeteors);
-  };
-
   const generateBlackHoles = () => {
     const numberOfBlackHoles = 2;
     const blackHoles = [];
-
     for (let i = 0; i < numberOfBlackHoles; i++) {
       blackHoles.push({
         id: i,
@@ -199,14 +205,12 @@ const StarBackground = () => {
         glowSize: Math.random() * 50 + 30,
       });
     }
-
     return blackHoles;
   };
 
   const generateAsteroids = () => {
     const numberOfAsteroids = 20;
     const asteroids = [];
-
     for (let i = 0; i < numberOfAsteroids; i++) {
       asteroids.push({
         id: i,
@@ -219,7 +223,6 @@ const StarBackground = () => {
         startAngle: Math.random() * 360,
       });
     }
-
     return asteroids;
   };
 
@@ -270,7 +273,6 @@ const StarBackground = () => {
           />
         </div>
       ))}
-
       {asteroids.map((asteroid) => (
         <div
           key={`asteroid-${asteroid.id}`}
@@ -284,15 +286,15 @@ const StarBackground = () => {
             background: "linear-gradient(45deg, #4a4a4a, #2a2a2a)",
             borderRadius: "20%",
             transform: `translate(-50%, -50%) rotate(${asteroid.startAngle}deg)`,
-            animation: `
-              orbit ${1 / asteroid.orbitSpeed}s linear infinite,
-              rotate ${asteroid.rotationSpeed}s linear infinite
-            `,
+            animation: `orbit ${
+              1 / asteroid.orbitSpeed
+            }s linear infinite, rotate ${
+              asteroid.rotationSpeed
+            }s linear infinite`,
             boxShadow: "0 0 5px rgba(255,255,255,0.2)",
           }}
         />
       ))}
-
       {stars.map((star) => (
         <div
           key={star.id}
@@ -310,69 +312,63 @@ const StarBackground = () => {
             transform: "translate(-50%, -50%)",
             animation: `
               ${
+                star.isBreathing
+                  ? `breathing-glow ${star.breathingDuration}s ease-in-out ${star.breathingDelay}s infinite alternate,`
+                  : ""
+              }
+              ${
                 star.isTwinkling
                   ? `twinkle ${star.twinkleSpeed}s ease-in-out infinite alternate,`
                   : ""
               }
               ${
-                star.isPulsing
-                  ? `pulse ${star.animationDuration}s ease-in-out infinite alternate`
+                star.isFalling
+                  ? `snow-fall ${star.fallSpeed}s linear ${star.fallDelay}s infinite`
                   : ""
               }
             `,
           }}
         />
       ))}
-
-      {meteors.map((meteor) => (
-        <div
-          key={meteor.id}
-          className="meteor"
-          style={{
-            width: `${meteor.size * 100}px`,
-            height: `${meteor.size}px`,
-            left: meteor.x + "%",
-            top: meteor.y + "%",
-            animationDelay: meteor.delay + "s",
-            animationDuration: meteor.animationDuration + "s",
-            opacity: meteor.opacity,
-            transform: `rotate(25deg)`,
-            background:
-              "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%)",
-            boxShadow: "0 0 10px rgba(255,255,255,0.8)",
-            position: "absolute",
-            animation: "meteor-fall linear infinite",
-          }}
-        />
-      ))}
-
       <style>
         {`
+          @keyframes breathing-glow {
+            0% {
+              box-shadow: 0 0 2px 0px currentColor;
+              opacity: 0.5;
+            }
+            50% {
+              box-shadow: 0 0 18px 6px currentColor;
+              opacity: 1;
+            }
+            100% {
+              box-shadow: 0 0 2px 0px currentColor;
+              opacity: 0.5;
+            }
+          }
           @keyframes twinkle {
             0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
             50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
             100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
           }
-
           @keyframes pulse {
             0% { box-shadow: 0 0 5px currentColor; }
             50% { box-shadow: 0 0 20px currentColor; }
             100% { box-shadow: 0 0 5px currentColor; }
           }
-
-          @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-          }
-
-          @keyframes orbit {
-            from { transform: translate(-50%, -50%) rotate(0deg) translateX(50px) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg) translateX(50px) rotate(-360deg); }
-          }
-
-          @keyframes meteor-fall {
-            0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 1; }
-            100% { transform: translateX(1000px) translateY(1000px) rotate(25deg); opacity: 0; }
+          @keyframes snow-fall {
+            0% {
+              transform: translate(-50%, -50%) translateX(0);
+              opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+              transform: translate(-50%, 100vh) translateX(${
+                Math.random() * 100 - 50
+              }px);
+              opacity: 0;
+            }
           }
         `}
       </style>
