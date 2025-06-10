@@ -27,6 +27,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null); // Ref for mobile menu container
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,11 +35,25 @@ const Navbar = () => {
     };
 
     const handleClickOutside = (event: MouseEvent) => {
+      // Close desktop dropdown if click outside
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsDropdownOpen(false);
+      }
+
+      // Close mobile menu if click outside and menu is open
+      // AND the click target is not the mobile menu toggle button
+      if (
+        isMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest(
+          'button[aria-label="Open Menu"], button[aria-label="Close Menu"]'
+        )
+      ) {
+        setIsMenuOpen(false);
       }
     };
 
@@ -49,7 +64,18 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isMenuOpen]); // Add isMenuOpen to dependency array to re-run effect when menu state changes
+
+  const toggleMobileMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+    // Close desktop dropdown when mobile menu is opened/closed
+    setIsDropdownOpen(false);
+  };
+
+  const handleMobileNavLinkClick = () => {
+    setIsMenuOpen(false); // Close mobile menu when a navigation link is clicked
+    setIsDropdownOpen(false); // Ensure dropdown is also closed
+  };
 
   return (
     <nav
@@ -96,7 +122,7 @@ const Navbar = () => {
                         key={subKey}
                         href={subItem.path}
                         className="block px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                        onClick={() => setIsDropdownOpen(false)}
+                        onClick={() => setIsDropdownOpen(false)} // Close dropdown when a sub-item is clicked
                       >
                         {subItem.name}
                       </a>
@@ -116,37 +142,85 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* mobile nav */}
+        {/* mobile nav toggle button (hamburger/X icon) */}
         <button
-          onClick={() => setIsMenuOpen((prev) => !prev)}
+          onClick={toggleMobileMenu}
           className="md:hidden p-2 text-foreground z-50"
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
         </button>
 
-        <div
-          className={cn(
-            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
-            "transition-all duration-300 md:hidden",
-            isMenuOpen
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          )}
-        >
-          <div className="flex flex-col space-y-8 text-xl">
-            {navItems.map((item, key) => (
-              <a
-                key={key}
-                href={item.path || "#"}
-                className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </a>
-            ))}
+        {/* mobile navigation overlay */}
+        {/* Only render the mobile menu if it's open or transitioning to open/close */}
+        {/* Added bg-background/95 and flex/items-center/justify-center for full screen dark background and centered content */}
+        {/* Ensure its content is visible and centered */}
+        {(isMenuOpen || mobileMenuRef.current) && (
+          <div
+            ref={mobileMenuRef} // Assign ref to the mobile menu container
+            className={cn(
+              "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center", // Ensure flexbox properties for centering
+              "transition-transform duration-300 md:hidden",
+              isMenuOpen ? "translate-x-0" : "translate-x-full"
+            )}
+          >
+            {/* Close button inside the mobile menu - one of the 'X's you see */}
+            <button
+              onClick={toggleMobileMenu}
+              className="absolute top-5 right-5 p-2 text-foreground z-50"
+              aria-label="Close Menu"
+            >
+              <X size={24} />
+            </button>
+            <div className="flex flex-col space-y-8 text-xl text-center">
+              {" "}
+              {/* Added text-center here */}
+              {navItems.map((item, key) =>
+                item.items ? (
+                  // Handle "More" dropdown for mobile
+                  <div key={key} className="text-center">
+                    <button
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className="text-foreground/80 hover:text-primary transition-colors duration-300 flex items-center justify-center gap-1 mx-auto"
+                    >
+                      {item.name}
+                      <ChevronDown
+                        size={16}
+                        className={cn(
+                          "transition-transform duration-200",
+                          isDropdownOpen ? "rotate-180" : ""
+                        )}
+                      />
+                    </button>
+                    {isDropdownOpen && (
+                      <div className="flex flex-col items-center space-y-4 mt-4">
+                        {item.items.map((subItem, subKey) => (
+                          <a
+                            key={subKey}
+                            href={subItem.path}
+                            className="text-foreground/70 hover:text-primary transition-colors duration-300 text-base"
+                            onClick={handleMobileNavLinkClick}
+                          >
+                            {subItem.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    key={key}
+                    href={item.path || "#"}
+                    className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                    onClick={handleMobileNavLinkClick}
+                  >
+                    {item.name}
+                  </a>
+                )
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
