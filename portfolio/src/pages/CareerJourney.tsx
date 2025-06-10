@@ -3,6 +3,8 @@ import { Briefcase, Calendar, MapPin } from "lucide-react";
 import Navbar from "../components/Navbar";
 import ThemeToggle from "../components/ThemeToggle";
 import StarBackground from "../components/StarBackground";
+import NatureBackground from "../components/NatureBackground";
+import { useTheme } from "../components/ThemeContext";
 
 const careerData = [
   {
@@ -55,9 +57,10 @@ const itemVariants = {
 };
 
 const CareerJourney = () => {
+  const { isDarkMode } = useTheme();
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <StarBackground />
+      {isDarkMode ? <StarBackground /> : <NatureBackground />}
       <Navbar />
       <ThemeToggle />
 

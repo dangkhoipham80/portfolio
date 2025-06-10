@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import StarBackground from "../components/StarBackground";
+import NatureBackground from "../components/NatureBackground";
+import { useTheme } from "../components/ThemeContext";
 import { motion } from "framer-motion";
 
 const containerVariants = {
@@ -33,9 +35,10 @@ const itemVariants = {
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useTheme();
   return (
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-      <StarBackground />
+      {isDarkMode ? <StarBackground /> : <NatureBackground />}
       <ThemeToggle />
 
       <div className="relative z-20 w-full max-w-4xl mx-auto px-4">

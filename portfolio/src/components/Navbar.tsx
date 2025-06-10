@@ -2,12 +2,13 @@ import { cn } from "../lib/utils";
 import { useEffect, useState, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
-  { name: "Home", path: "#" },
-  { name: "About", path: "#about" },
-  { name: "Skills", path: "#skills" },
-  { name: "Projects", path: "#projects" },
+  { name: "Home", path: "/" },
+  { name: "About", path: "/#about" },
+  { name: "Skills", path: "/#skills" },
+  { name: "Projects", path: "/#projects" },
   {
     name: "More",
     path: "#",
@@ -17,7 +18,7 @@ const navItems = [
       { name: "Blog", path: "/blog" },
       { name: "Testimonials", path: "/testimonials" },
       { name: "Resume", path: "/resume" },
-      { name: "Contact", path: "#contact" },
+      { name: "Contact", path: "/#contact" },
       { name: "Activity", path: "/activity" },
     ],
   },
@@ -31,6 +32,7 @@ const Navbar = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fullText = "Phạm Đăng Khôi";
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,27 +133,98 @@ const Navbar = () => {
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute top-full left-0 mt-2 w-48 rounded-md shadow-lg bg-background/95 backdrop-blur-md border border-foreground/10 py-2">
-                    {item.items.map((subItem, subKey) => (
-                      <a
-                        key={subKey}
-                        href={subItem.path}
-                        className="block px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                        onClick={() => setIsDropdownOpen(false)}
-                      >
-                        {subItem.name}
-                      </a>
-                    ))}
+                    {item.items.map((subItem, subKey) => {
+                      if (
+                        subItem.path.startsWith("http") ||
+                        subItem.path.startsWith("mailto") ||
+                        subItem.path.startsWith("tel")
+                      ) {
+                        return (
+                          <a
+                            key={subKey}
+                            href={subItem.path}
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                            onClick={() => setIsDropdownOpen(false)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {subItem.name}
+                          </a>
+                        );
+                      } else if (subItem.path.startsWith("/#")) {
+                        return (
+                          <Link
+                            key={subKey}
+                            to={
+                              location.pathname === "/"
+                                ? location.hash
+                                : subItem.path
+                            }
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                            onClick={(e) => {
+                              setIsDropdownOpen(false);
+                              if (location.pathname === "/") {
+                                e.preventDefault();
+                                window.location.hash = subItem.path.replace(
+                                  "/#",
+                                  "#"
+                                );
+                              }
+                            }}
+                          >
+                            {subItem.name}
+                          </Link>
+                        );
+                      } else {
+                        return (
+                          <Link
+                            key={subKey}
+                            to={subItem.path}
+                            className="block px-4 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            {subItem.name}
+                          </Link>
+                        );
+                      }
+                    })}
                   </div>
                 )}
               </div>
-            ) : (
+            ) : item.path.startsWith("http") ||
+              item.path.startsWith("mailto") ||
+              item.path.startsWith("tel") ? (
               <a
                 key={key}
                 href={item.path}
                 className="text-lg text-foreground hover:text-primary transition-colors duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {item.name}
               </a>
+            ) : item.path.startsWith("/#") ? (
+              <Link
+                key={key}
+                to={location.pathname === "/" ? location.hash : item.path}
+                className="text-lg text-foreground hover:text-primary transition-colors duration-300"
+                onClick={(e) => {
+                  if (location.pathname === "/") {
+                    e.preventDefault();
+                    window.location.hash = item.path.replace("/#", "#");
+                  }
+                }}
+              >
+                {item.name}
+              </Link>
+            ) : (
+              <Link
+                key={key}
+                to={item.path}
+                className="text-lg text-foreground hover:text-primary transition-colors duration-300"
+              >
+                {item.name}
+              </Link>
             )
           )}
         </div>
