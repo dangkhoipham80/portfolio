@@ -8,6 +8,8 @@ interface Star {
   opacity?: number;
   delay?: number;
   animationDuration: number;
+  twinkleSpeed?: number;
+  color?: string;
 }
 
 interface MousePosition {
@@ -45,7 +47,6 @@ const StarBackground = () => {
 
     const animate = () => {
       if (backgroundRef.current) {
-        // Smoothly interpolate current position to target position
         const smoothingFactor = 0.1;
         currentTransform.current.x +=
           (lastMousePosition.current.x - currentTransform.current.x) *
@@ -62,7 +63,6 @@ const StarBackground = () => {
             currentTransform.current.rotateY) *
           smoothingFactor;
 
-        // Apply transform with gentle swaying
         const swayX = Math.sin(Date.now() * 0.001) * 2;
         const swayY = Math.cos(Date.now() * 0.001) * 2;
 
@@ -74,7 +74,6 @@ const StarBackground = () => {
           rotateY(${currentTransform.current.rotateY}deg)
         `;
 
-        // Apply transform to root element with reduced movement
         const root = document.getElementById("root");
         if (root) {
           root.style.transform = `
@@ -93,7 +92,6 @@ const StarBackground = () => {
       const { clientX, clientY } = event;
       const k = 2.5;
 
-      // Calculate target positions
       lastMousePosition.current = {
         x: ((clientX - window.innerWidth / 2) * 0.015) / k,
         y: ((clientY - window.innerHeight / 2) * 0.015) / k,
@@ -103,11 +101,9 @@ const StarBackground = () => {
     };
 
     const handleMouseLeave = () => {
-      // Smoothly return to center position
       lastMousePosition.current = { x: 0, y: 0, rotateX: 0, rotateY: 0 };
     };
 
-    // Start animation loop
     animationFrameRef.current = requestAnimationFrame(animate);
 
     window.addEventListener("resize", handleResize);
@@ -126,8 +122,16 @@ const StarBackground = () => {
 
   const generateStars = () => {
     const numberOfStars = Math.floor(
-      (window.innerWidth * window.innerHeight) / 10000
+      (window.innerWidth * window.innerHeight) / 8000
     );
+
+    const starColors = [
+      "#ffffff", // White
+      "#fff7e6", // Warm white
+      "#e6f3ff", // Cool white
+      "#ffe6e6", // Pink tint
+      "#e6ffe6", // Green tint
+    ];
 
     const newStars = [];
 
@@ -139,6 +143,8 @@ const StarBackground = () => {
         y: Math.random() * 100,
         opacity: Math.random() * 0.5 + 0.5,
         animationDuration: Math.random() * 4 + 2,
+        twinkleSpeed: Math.random() * 2 + 1,
+        color: starColors[Math.floor(Math.random() * starColors.length)],
       });
     }
 
@@ -146,17 +152,18 @@ const StarBackground = () => {
   };
 
   const generateMeteors = () => {
-    const numberOfMeteors = 10;
+    const numberOfMeteors = 15;
     const newMeteors = [];
 
     for (let i = 0; i < numberOfMeteors; i++) {
       newMeteors.push({
         id: i,
-        size: Math.random() * 2 + 1,
+        size: Math.random() * 3 + 2,
         x: Math.random() * 100,
         y: Math.random() * -20,
-        delay: Math.random() * 10 + 2,
-        animationDuration: Math.random() * 4 + 4,
+        delay: Math.random() * 15 + 2,
+        animationDuration: Math.random() * 3 + 2,
+        opacity: Math.random() * 0.5 + 0.5,
       });
     }
 
@@ -184,6 +191,9 @@ const StarBackground = () => {
             top: star.y + "%",
             opacity: star.opacity,
             animationDuration: star.animationDuration + "s",
+            backgroundColor: star.color,
+            boxShadow: `0 0 ${star.size * 2}px ${star.color}`,
+            animation: `twinkle ${star.twinkleSpeed}s ease-in-out infinite alternate`,
           }}
         />
       ))}
@@ -193,12 +203,14 @@ const StarBackground = () => {
           key={meteor.id}
           className="meteor"
           style={{
-            width: meteor.size + "px",
-            height: meteor.size + "px",
+            width: `${meteor.size * 50}px`,
+            height: `${meteor.size}px`,
             left: meteor.x + "%",
             top: meteor.y + "%",
             animationDelay: meteor.delay + "s",
             animationDuration: meteor.animationDuration + "s",
+            opacity: meteor.opacity,
+            transform: `rotate(25deg)`,
           }}
         />
       ))}
