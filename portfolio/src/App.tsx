@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import StarBackground from "./components/StarBackground";
 import NatureBackground from "./components/NatureBackground";
+import CareerJourney from "./pages/CareerJourney";
 
 function App() {
   const isDarkMode =
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Home />} />
+          <Route path="/career-journey" element={<CareerJourney />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

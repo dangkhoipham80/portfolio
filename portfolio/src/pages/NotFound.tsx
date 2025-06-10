@@ -1,42 +1,95 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import ThemeToggle from "../components/ThemeToggle";
 import StarBackground from "../components/StarBackground";
+import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.5,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    scale: 0.8,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
 
 const NotFound = () => {
   const navigate = useNavigate();
   return (
-    // The main container that will hold everything. It should be full screen.
-    // We are placing the background, then a container for header/toggle, then the main content.
-    <div className="relative min-h-screen w-full flex flex-col">
-      {/* 1. StarBackground: This must be at the very back (z-index 0, as defined in index.css for .background-container)
-           It should cover the entire viewport.
-      */}
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
       <StarBackground />
-
-      {/* 2. Header Layer: Navbar and ThemeToggle. They should be positioned above the background.
-           Give them a specific z-index (e.g., z-30 or z-40) and ensure they are positioned Fixed/Absolute.
-           Your Navbar might already have its own positioning.
-      */}
-      {/* Assuming Navbar and ThemeToggle are fixed/absolute and have their own z-index */}
-      <Navbar />
       <ThemeToggle />
 
-      {/* 3. Main 404 Content Layer: This should be above the StarBackground but potentially below Navbar/ThemeToggle 
-           if they are part of a fixed header.
-           If Navbar and ThemeToggle are already positioned fixed/absolute and have high z-index, 
-           then the main content needs to be z-index 20 to sit above StarBackground.
-      */}
-      <div className="relative z-20 flex-1 flex flex-col items-center justify-center text-center p-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 text-glow-404 text-foreground">
-          404 - Page Not Found
-        </h1>
-        <p className="mb-8 text-lg animate-fade-in-delay-1 text-foreground">
-          The page you are looking for does not exist.
-        </p>
-        <button onClick={() => navigate("/")} className="button-bounce">
-          Back to Home
-        </button>
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="text-center"
+        >
+          <motion.div variants={itemVariants}>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold mb-8 font-mono">
+              <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+                404
+              </span>
+            </h1>
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-mono">
+              <span className="bg-gradient-to-r from-primary/90 via-primary/70 to-primary/50 bg-clip-text text-transparent">
+                Not Found
+              </span>
+            </h2>
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <p className="mb-12 text-xl text-muted-foreground leading-relaxed font-mono max-w-2xl mx-auto">
+              The page you're looking for doesn't exist or has been moved.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.button
+              onClick={() => navigate("/")}
+              className="cosmic-button group relative overflow-hidden px-10 py-4 text-xl font-mono"
+              whileHover={{
+                boxShadow: "0 0 20px rgba(var(--primary-rgb), 0.3)",
+              }}
+            >
+              <span className="relative z-10">Back to Home</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.button>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
