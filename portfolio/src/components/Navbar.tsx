@@ -94,8 +94,9 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
+      // Add 'hidden' for mobile, and 'md:block' to show on medium and larger screens
       className={cn(
-        "fixed w-full z-40 transition-all duration-300",
+        "fixed w-full z-40 transition-all duration-300 hidden md:block", // <-- Changed here
         isScrolled
           ? "py-3 bg-background/80 backdrop-blur-lg border-b border-foreground/10 shadow-lg"
           : "py-5"
@@ -120,7 +121,7 @@ const Navbar = () => {
           </span>
         </motion.a>
 
-        {/* desktop navigation */}
+        {/* desktop navigation (already hidden on mobile by the parent 'nav' element) */}
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item, key) =>
             item.items ? (
@@ -165,10 +166,11 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* mobile nav */}
+        {/* mobile menu button and overlay (these will now never be visible because the parent 'nav' is hidden on mobile) */}
+        {/* You can remove these if you want to keep your code clean, as they are effectively not used */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="md:hidden p-2 text-foreground z-50"
+          className="md:hidden p-2 text-foreground z-50 hidden" // Added 'hidden'
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
@@ -176,7 +178,7 @@ const Navbar = () => {
 
         <div
           className={cn(
-            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
+            "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center hidden", // Added 'hidden'
             "transition-all duration-300 md:hidden",
             isMenuOpen
               ? "opacity-100 pointer-events-auto"
