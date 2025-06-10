@@ -10,6 +10,9 @@ interface Star {
   animationDuration: number;
   twinkleSpeed?: number;
   color?: string;
+  isPulsing?: boolean;
+  isTwinkling?: boolean;
+  glowSize?: number;
 }
 
 interface MousePosition {
@@ -122,7 +125,7 @@ const StarBackground = () => {
 
   const generateStars = () => {
     const numberOfStars = Math.floor(
-      (window.innerWidth * window.innerHeight) / 8000
+      (window.innerWidth * window.innerHeight) / 2000
     );
 
     const starColors = [
@@ -131,20 +134,32 @@ const StarBackground = () => {
       "#e6f3ff", // Cool white
       "#ffe6e6", // Pink tint
       "#e6ffe6", // Green tint
+      "#e6e6ff", // Blue tint
+      "#fff0e6", // Orange tint
+      "#ffd700", // Gold
+      "#ff69b4", // Hot pink
+      "#00ffff", // Cyan
     ];
 
     const newStars = [];
 
     for (let i = 0; i < numberOfStars; i++) {
+      const size = Math.random() * 2 + 0.5;
+      const isPulsing = Math.random() > 0.7;
+      const isTwinkling = Math.random() > 0.5;
+
       newStars.push({
         id: i,
-        size: Math.random() * 3 + 1,
+        size,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        opacity: Math.random() * 0.5 + 0.5,
-        animationDuration: Math.random() * 4 + 2,
-        twinkleSpeed: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.7 + 0.3,
+        animationDuration: Math.random() * 3 + 1,
+        twinkleSpeed: Math.random() * 1.5 + 0.5,
         color: starColors[Math.floor(Math.random() * starColors.length)],
+        isPulsing,
+        isTwinkling,
+        glowSize: size * (Math.random() * 3 + 2),
       });
     }
 
@@ -152,23 +167,64 @@ const StarBackground = () => {
   };
 
   const generateMeteors = () => {
-    const numberOfMeteors = 15;
+    const numberOfMeteors = 25;
     const newMeteors = [];
 
     for (let i = 0; i < numberOfMeteors; i++) {
       newMeteors.push({
         id: i,
-        size: Math.random() * 3 + 2,
+        size: Math.random() * 2 + 1,
         x: Math.random() * 100,
-        y: Math.random() * -20,
-        delay: Math.random() * 15 + 2,
-        animationDuration: Math.random() * 3 + 2,
-        opacity: Math.random() * 0.5 + 0.5,
+        y: Math.random() * -30,
+        delay: Math.random() * 20 + 5,
+        animationDuration: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.7 + 0.3,
       });
     }
 
     setMeteors(newMeteors);
   };
+
+  const generateBlackHoles = () => {
+    const numberOfBlackHoles = 2;
+    const blackHoles = [];
+
+    for (let i = 0; i < numberOfBlackHoles; i++) {
+      blackHoles.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 150 + 100,
+        rotationSpeed: Math.random() * 20 + 10,
+        glowSize: Math.random() * 50 + 30,
+      });
+    }
+
+    return blackHoles;
+  };
+
+  const generateAsteroids = () => {
+    const numberOfAsteroids = 20;
+    const asteroids = [];
+
+    for (let i = 0; i < numberOfAsteroids; i++) {
+      asteroids.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 4 + 2,
+        rotationSpeed: Math.random() * 10 + 5,
+        orbitRadius: Math.random() * 100 + 50,
+        orbitSpeed: Math.random() * 0.02 + 0.01,
+        startAngle: Math.random() * 360,
+      });
+    }
+
+    return asteroids;
+  };
+
+  const blackHoles = generateBlackHoles();
+  const asteroids = generateAsteroids();
 
   return (
     <div
@@ -177,23 +233,93 @@ const StarBackground = () => {
       style={{
         transition: "transform 0.1s linear",
         willChange: "transform",
+        background:
+          "radial-gradient(circle at center, #000000 0%, #0a0a2a 100%)",
       }}
     >
       <div className="moon"></div>
+      {blackHoles.map((hole) => (
+        <div
+          key={`blackhole-${hole.id}`}
+          className="black-hole"
+          style={{
+            position: "absolute",
+            left: `${hole.x}%`,
+            top: `${hole.y}%`,
+            width: `${hole.size}px`,
+            height: `${hole.size}px`,
+            background:
+              "radial-gradient(circle at center, #000000 0%, transparent 70%)",
+            borderRadius: "50%",
+            transform: "translate(-50%, -50%)",
+            animation: `rotate ${hole.rotationSpeed}s linear infinite`,
+            boxShadow: `0 0 ${hole.glowSize}px rgba(0,0,0,0.8)`,
+          }}
+        >
+          <div
+            className="event-horizon"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle at center, #000000 0%, transparent 60%)",
+              boxShadow: "inset 0 0 50px rgba(0,0,0,0.8)",
+            }}
+          />
+        </div>
+      ))}
+
+      {asteroids.map((asteroid) => (
+        <div
+          key={`asteroid-${asteroid.id}`}
+          className="asteroid"
+          style={{
+            position: "absolute",
+            width: `${asteroid.size}px`,
+            height: `${asteroid.size}px`,
+            left: `${asteroid.x}%`,
+            top: `${asteroid.y}%`,
+            background: "linear-gradient(45deg, #4a4a4a, #2a2a2a)",
+            borderRadius: "20%",
+            transform: `translate(-50%, -50%) rotate(${asteroid.startAngle}deg)`,
+            animation: `
+              orbit ${1 / asteroid.orbitSpeed}s linear infinite,
+              rotate ${asteroid.rotationSpeed}s linear infinite
+            `,
+            boxShadow: "0 0 5px rgba(255,255,255,0.2)",
+          }}
+        />
+      ))}
+
       {stars.map((star) => (
         <div
           key={star.id}
-          className="star animate-pulse-subtle"
+          className="star"
           style={{
             width: star.size + "px",
             height: star.size + "px",
             left: star.x + "%",
             top: star.y + "%",
             opacity: star.opacity,
-            animationDuration: star.animationDuration + "s",
             backgroundColor: star.color,
-            boxShadow: `0 0 ${star.size * 2}px ${star.color}`,
-            animation: `twinkle ${star.twinkleSpeed}s ease-in-out infinite alternate`,
+            boxShadow: `0 0 ${star.glowSize}px ${star.color}`,
+            borderRadius: "50%",
+            position: "absolute",
+            transform: "translate(-50%, -50%)",
+            animation: `
+              ${
+                star.isTwinkling
+                  ? `twinkle ${star.twinkleSpeed}s ease-in-out infinite alternate,`
+                  : ""
+              }
+              ${
+                star.isPulsing
+                  ? `pulse ${star.animationDuration}s ease-in-out infinite alternate`
+                  : ""
+              }
+            `,
           }}
         />
       ))}
@@ -203,7 +329,7 @@ const StarBackground = () => {
           key={meteor.id}
           className="meteor"
           style={{
-            width: `${meteor.size * 50}px`,
+            width: `${meteor.size * 100}px`,
             height: `${meteor.size}px`,
             left: meteor.x + "%",
             top: meteor.y + "%",
@@ -211,9 +337,45 @@ const StarBackground = () => {
             animationDuration: meteor.animationDuration + "s",
             opacity: meteor.opacity,
             transform: `rotate(25deg)`,
+            background:
+              "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%)",
+            boxShadow: "0 0 10px rgba(255,255,255,0.8)",
+            position: "absolute",
+            animation: "meteor-fall linear infinite",
           }}
         />
       ))}
+
+      <style>
+        {`
+          @keyframes twinkle {
+            0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.8); }
+          }
+
+          @keyframes pulse {
+            0% { box-shadow: 0 0 5px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; }
+            100% { box-shadow: 0 0 5px currentColor; }
+          }
+
+          @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+          }
+
+          @keyframes orbit {
+            from { transform: translate(-50%, -50%) rotate(0deg) translateX(50px) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg) translateX(50px) rotate(-360deg); }
+          }
+
+          @keyframes meteor-fall {
+            0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 1; }
+            100% { transform: translateX(1000px) translateY(1000px) rotate(25deg); opacity: 0; }
+          }
+        `}
+      </style>
     </div>
   );
 };
