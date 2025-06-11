@@ -266,7 +266,7 @@ const MainSection = () => {
             </motion.div>
             <span className="inline-block">Hi,</span>{" "}
             <span className="inline-block">I'm&nbsp;</span>
-            <span className="inline-block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent min-w-[12ch] h-[1.2em] flex items-center relative">
+            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent min-w-[16ch] h-[1.2em] flex items-center relative whitespace-nowrap">
               {displayed}
               <span className="inline-block animate-pulse">|</span>
               <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-primary/60 via-primary to-primary/60 rounded-full"></span>
