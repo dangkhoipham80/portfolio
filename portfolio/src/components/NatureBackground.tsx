@@ -5,16 +5,6 @@ function randomBetween(a: number, b: number): number {
   return Math.random() * (b - a) + a;
 }
 
-// Type definitions for various elements
-type BirdStyle = {
-  top: string;
-  left: string;
-  animationDuration: string;
-  animationDelay: string;
-  scale: number;
-  color: string;
-  path: string;
-};
 type ButterflyStyle = {
   top: string;
   left: string;
@@ -33,25 +23,7 @@ type CloudStyle = {
   opacity: number;
   anim: string;
 };
-type FlowerStyle = {
-  cx: number;
-  cy: number;
-  r: number;
-  fill: string;
-  animationDuration: string;
-  animationDelay: string;
-};
 
-// Colors for birds and butterflies
-const birdColors = [
-  "#444",
-  "#e67e22",
-  "#2980b9",
-  "#27ae60",
-  "#e74c3c",
-  "#8e44ad",
-  "#f1c40f",
-];
 const butterflyColors = [
   "#ffb347",
   "#ff6961",
@@ -61,32 +33,8 @@ const butterflyColors = [
   "#cfcfc4",
   "#b39eb5",
 ];
-const flowerColors = [
-  "#ffb6b9",
-  "#f9d423",
-  "#f6e58d",
-  "#b8e994",
-  "#f7cac9",
-  "#f38181",
-];
 
 // --- Generation Functions ---
-
-function generateBirds(n = 8): { style: BirdStyle & { anim: string } }[] {
-  const birdAnims = ["bird-fly", "bird-flap", "bird-arc"];
-  return Array.from({ length: n }).map((_, idx) => ({
-    style: {
-      top: `${randomBetween(10, 70)}%`, // Birds fly slightly higher
-      left: `${randomBetween(-20, -5)}%`, // Start off-screen to the left
-      animationDuration: `${randomBetween(16, 30)}s`, // Slightly longer duration for full cross-screen travel
-      animationDelay: `${randomBetween(0, 15)}s`, // Increased delay range for staggered appearance
-      scale: randomBetween(0.8, 1.3),
-      color: birdColors[Math.floor(Math.random() * birdColors.length)],
-      path: idx % 2 === 0 ? "M5 25 Q20 10 35 25" : "M5 30 Q20 5 35 30",
-      anim: birdAnims[Math.floor(Math.random() * birdAnims.length)],
-    },
-  }));
-}
 
 function generateButterflies(
   n = 10
@@ -122,39 +70,20 @@ function generateClouds(n = 7): { style: CloudStyle }[] {
   }));
 }
 
-function generateFlowers(n = 20): { style: FlowerStyle }[] {
-  return Array.from({ length: n }).map((_, i) => ({
-    style: {
-      cx: randomBetween(30 + i * 50, 60 + i * 50), // Spread flowers across the width
-      cy: randomBetween(120, 130), // Position near the bottom grass
-      r: randomBetween(5, 10), // Varied size
-      fill: flowerColors[Math.floor(Math.random() * flowerColors.length)],
-      animationDuration: `${randomBetween(2, 4)}s`,
-      animationDelay: `${randomBetween(0, 3)}s`, // Stagger blooming
-    },
-  }));
-}
-
 // --- React Component ---
 
 const NatureBackground = () => {
-  const [birds, setBirds] = useState<{ style: BirdStyle & { anim: string } }[]>(
-    () => generateBirds(8)
-  );
   const [butterflies, setButterflies] = useState<
     { style: ButterflyStyle & { direction?: number; anim: string } }[]
   >(() => generateButterflies(10));
   const [clouds, setClouds] = useState(() => generateClouds(7));
-  const [flowers, setFlowers] = useState(() => generateFlowers(20)); // New state for flowers
   const bgRef = useRef<HTMLDivElement>(null);
 
   // Regenerate elements on resize for variety
   useEffect(() => {
     const onResize = () => {
-      setBirds(generateBirds(8));
       setButterflies(generateButterflies(10));
       setClouds(generateClouds(7));
-      setFlowers(generateFlowers(20));
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -208,38 +137,6 @@ const NatureBackground = () => {
             zIndex: 2,
           }}
         />
-      ))}
-      {/* Birds with random color and path */}
-      {birds.map((bird, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{
-            width: "44px",
-            height: "44px",
-            top: bird.style.top,
-            left: bird.style.left,
-            animation: `${bird.style.anim} ${
-              bird.style.animationDuration
-            } linear infinite, bird-float-strong ${randomBetween(
-              7,
-              16
-            )}s ease-in-out infinite alternate`,
-            animationDelay: bird.style.animationDelay,
-            zIndex: 3,
-            transform: `scale(${bird.style.scale})`,
-          }}
-        >
-          <svg width="44" height="44" viewBox="0 0 40 40" fill="none">
-            <path
-              d={bird.style.path}
-              stroke={bird.style.color}
-              strokeWidth="2.5"
-              fill="none"
-              className="bird-path"
-            />
-          </svg>
-        </div>
       ))}
       {/* Butterflies with random color and WAVE float */}
       {butterflies.map((b, i) => (
@@ -304,7 +201,7 @@ const NatureBackground = () => {
           }}
         />
       ))}
-      {/* Grass, flowers, leaves, big plants at bottom */}
+      {/* Grass, leaves, big plants at bottom */}
       <div
         className="absolute left-0 right-0 bottom-0 z-10 pointer-events-none"
         style={{ height: 140 }}
@@ -373,26 +270,6 @@ const NatureBackground = () => {
               }}
             />
           ))}
-          {/* Flowers */}
-          {flowers.map((flower, i) => (
-            <circle
-              key={i}
-              cx={flower.style.cx}
-              cy={flower.style.cy}
-              r={flower.style.r}
-              fill={flower.style.fill}
-              style={{
-                animation: `plant-sway ${randomBetween(
-                  2,
-                  6
-                )}s ease-in-out infinite alternate, flower-bloom ${
-                  flower.style.animationDuration
-                } ease-out ${flower.style.animationDelay} forwards`, // Added flower-bloom animation
-                transformOrigin: `${flower.style.cx}px ${flower.style.cy}px`,
-                transform: "scale(0)", // Start scaled to 0 for bloom effect
-              }}
-            />
-          ))}
           {/* Leaves */}
           {Array.from({ length: 12 }).map((_, i) => (
             <ellipse
@@ -438,43 +315,6 @@ const NatureBackground = () => {
           0%, 100% { filter: blur(3px) brightness(1); }
           50% { filter: blur(6px) brightness(1.1); }
         }
-
-        /* Bird Animations */
-        @keyframes bird-fly {
-          0% { transform: translateX(-20vw) scale(var(--scale, 1)); } /* Start further left */
-          100% { transform: translateX(120vw) scale(var(--scale, 1)); } /* End further right */
-        }
-        @keyframes bird-flap {
-          0%, 100% { transform: translateY(0) scale(var(--scale, 1)); }
-          20% { transform: translateY(-10px) scale(var(--scale, 1.1)); }
-          40% { transform: translateY(10px) scale(var(--scale, 0.95)); }
-          60% { transform: translateY(-12px) scale(var(--scale, 1.1)); }
-          80% { transform: translateY(8px) scale(var(--scale, 0.9)); }
-        }
-        @keyframes bird-arc {
-          0% { transform: translateX(-20vw) translateY(0) scale(var(--scale, 1)); }
-          50% { transform: translateX(50vw) translateY(-50px) scale(var(--scale, 1.1)); }
-          100% { transform: translateX(120vw) translateY(0) scale(var(--scale, 1)); }
-        }
-        @keyframes bird-float {
-          0% { transform: translateY(0) scale(var(--scale, 1)); }
-          100% { transform: translateY(-7px) scale(var(--scale, 1)); }
-        }
-        @keyframes bird-float-strong {
-          0% { transform: translateY(0) scale(var(--scale, 1)); }
-          50% { transform: translateY(-18px) scale(var(--scale, 1.05)); }
-          100% { transform: translateY(-32px) scale(var(--scale, 1)); }
-        }
-        .bird-path {
-          stroke-dasharray: 100;
-          stroke-dashoffset: 100;
-          animation: draw-bird 2s ease-in-out infinite alternate;
-        }
-        @keyframes draw-bird {
-          0% { stroke-dashoffset: 100; }
-          100% { stroke-dashoffset: 0; }
-        }
-
         /* Sun Animations */
         @keyframes sun-pulse {
           0% {
@@ -524,16 +364,11 @@ const NatureBackground = () => {
           transform-origin: 16px 16px;
         }
 
-        /* Plant & Flower Animations */
+        /* Plant Animations */
         @keyframes plant-sway {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(7deg); }
         }
-        @keyframes flower-bloom {
-          0% { transform: scale(0); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-
         /* Firefly Animation */
         @keyframes firefly-move {
           0% { opacity: 0.7; transform: translateY(0) scale(1); }

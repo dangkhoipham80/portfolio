@@ -7,8 +7,11 @@ import {
   GitBranch,
   ChevronDown,
   ChevronUp,
+  Star,
+  Brain,
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { motion } from "framer-motion";
 
 const getLevelColor = (level: string) => {
   switch (level) {
@@ -135,8 +138,11 @@ const categories = [
   "Languages",
 ];
 
+const levels = ["All", "Expert", "Advanced", "Intermediate", "Beginner"];
+
 const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = React.useState("All");
+  const [activeLevel, setActiveLevel] = React.useState("All");
   const [showAllSkills, setShowAllSkills] = React.useState(false);
   const [showAllCategories, setShowAllCategories] = React.useState(false);
   const INITIAL_SKILLS_COUNT = 15;
@@ -144,7 +150,9 @@ const SkillsSection = () => {
 
   const filteredSkills = skills
     .filter(
-      (skill) => activeCategory === "All" || skill.category === activeCategory
+      (skill) =>
+        (activeCategory === "All" || skill.category === activeCategory) &&
+        (activeLevel === "All" || skill.level === activeLevel)
     )
     .sort((a, b) => getLevelOrder(b.level) - getLevelOrder(a.level));
 
@@ -161,17 +169,58 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
-        <div className="flex flex-col items-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent text-center">
-            My Skills
-          </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center mb-12"
+        >
+          <div className="flex items-center gap-4">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, type: "spring" }}
+              className="relative"
+            >
+              <motion.div
+                animate={{
+                  boxShadow: [
+                    "0 0 0 0 rgba(var(--primary), 0.4)",
+                    "0 0 0 10px rgba(var(--primary), 0)",
+                    "0 0 0 0 rgba(var(--primary), 0.4)",
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="p-3 rounded-full bg-primary/10"
+              >
+                <Brain className="h-10 w-10 text-primary" />
+              </motion.div>
+            </motion.div>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent text-center">
+              My Skills
+            </h2>
+          </div>
           <div className="h-1 w-24 bg-gradient-to-r from-primary/60 via-primary/80 to-primary rounded-full mt-3 animate-pulse" />
-        </div>
+        </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-4 mb-8"
+        >
           {displayedCategories.map((category, key) => (
-            <button
+            <motion.button
               key={key}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => {
                 setActiveCategory(category);
                 setShowAllSkills(false);
@@ -184,10 +233,12 @@ const SkillsSection = () => {
               )}
             >
               {category}
-            </button>
+            </motion.button>
           ))}
           {hasMoreCategories && (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowAllCategories(!showAllCategories)}
               className="flex items-center gap-2 px-5 py-2 rounded-full font-mono text-sm font-semibold border border-primary/30 bg-background/60 hover:bg-primary/10 transition-all duration-300 shadow-sm"
             >
@@ -197,22 +248,60 @@ const SkillsSection = () => {
               ) : (
                 <ChevronDown className="h-4 w-4" />
               )}
-            </button>
+            </motion.button>
           )}
-        </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-wrap justify-center gap-4 mb-12"
+        >
+          {levels.map((level, key) => (
+            <motion.button
+              key={key}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setActiveLevel(level);
+                setShowAllSkills(false);
+              }}
+              className={cn(
+                "px-5 py-2 rounded-full font-mono text-sm font-semibold border border-primary/30 bg-background/60 hover:bg-primary/10 transition-all duration-300 capitalize shadow-sm flex items-center gap-2",
+                activeLevel === level
+                  ? "bg-gradient-to-r from-primary/80 to-primary text-primary-foreground border-primary shadow-md scale-105"
+                  : "text-primary hover:scale-105"
+              )}
+            >
+              {level !== "All" && <Star className="h-4 w-4" />}
+              {level}
+            </motion.button>
+          ))}
+        </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedSkills.map((skill, index) => {
             const Icon = skill.icon;
             return (
-              <div
+              <motion.div
                 key={index}
-                className="gradient-border p-6 rounded-2xl card-hover group bg-background/80 shadow-lg transition-all duration-300 flex flex-col h-full"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="gradient-border p-6 rounded-2xl card-hover group bg-background/80 shadow-lg transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:shadow-primary/10"
               >
                 <div className="flex items-center gap-4 mb-2">
-                  <div className="flex-shrink-0 p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                  <motion.div
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex-shrink-0 p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300"
+                  >
                     <Icon className="h-7 w-7 text-primary" />
-                  </div>
+                  </motion.div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-mono font-bold text-lg truncate text-primary">
@@ -227,9 +316,9 @@ const SkillsSection = () => {
                       </span>
                     </div>
                     <div className="w-full bg-secondary/50 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 h-2 rounded-full origin-left animate-grow"
-                        style={{
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{
                           width:
                             skill.level === "Expert"
                               ? "100%"
@@ -238,21 +327,30 @@ const SkillsSection = () => {
                               : skill.level === "Intermediate"
                               ? "60%"
                               : "40%",
-                          animationDelay: `${index * 0.1}s`,
-                          animationDuration: "1.5s",
                         }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: index * 0.1 }}
+                        className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 h-2 rounded-full"
                       />
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
 
         {hasMoreSkills && (
-          <div className="flex justify-center mt-10">
-            <button
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex justify-center mt-10"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setShowAllSkills(!showAllSkills)}
               className="cosmic-button flex items-center gap-2 text-lg font-mono px-6 py-3"
             >
@@ -262,8 +360,8 @@ const SkillsSection = () => {
               ) : (
                 <ChevronDown className="h-5 w-5" />
               )}
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
       </div>
     </section>

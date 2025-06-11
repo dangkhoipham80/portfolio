@@ -7,6 +7,7 @@ import {
   Phone,
   Send,
   Code2,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useToast } from "../hooks/use-toast";
@@ -104,16 +105,45 @@ const ContactSection = () => {
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
         >
-          <motion.h2
+          <motion.div
             variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold mb-6 text-center relative"
+            className="flex flex-col items-center mb-6"
           >
-            Get In{" "}
-            <span className="text-primary relative">
-              Touch
-              <span className="absolute -bottom-2 left-0 w-full h-1 bg-primary/30 rounded-full"></span>
-            </span>
-          </motion.h2>
+            <div className="flex items-center gap-4">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, type: "spring" }}
+                className="relative"
+              >
+                <motion.div
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 0 rgba(var(--primary), 0.4)",
+                      "0 0 0 10px rgba(var(--primary), 0)",
+                      "0 0 0 0 rgba(var(--primary), 0.4)",
+                    ],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="p-3 rounded-full bg-primary/10"
+                >
+                  <MessageSquare className="h-10 w-10 text-primary" />
+                </motion.div>
+              </motion.div>
+              <h2 className="text-4xl md:text-5xl font-bold text-center relative">
+                Get In{" "}
+                <span className="text-primary relative">
+                  Touch
+                  <span className="absolute -bottom-2 left-0 w-full h-1 bg-primary/30 rounded-full"></span>
+                </span>
+              </h2>
+            </div>
+          </motion.div>
 
           <motion.p
             variants={itemVariants}
