@@ -4,6 +4,7 @@ import NotFound from "./pages/NotFound";
 import StarBackground from "./components/StarBackground";
 import NatureBackground from "./components/NatureBackground";
 import CareerJourney from "./pages/CareerJourney";
+import Certificates from "./pages/Certificates";
 import { useTheme } from "./components/ThemeContext";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="/career-journey" element={<CareerJourney />} />
+          <Route path="/certificates" element={<Certificates />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
