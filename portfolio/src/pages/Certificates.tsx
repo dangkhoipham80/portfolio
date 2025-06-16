@@ -210,7 +210,7 @@ const Certificates = () => {
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                   <div className="space-y-2">
                     <div className="flex flex-col gap-2">
-                      <h3 className="text-2xl font-bold text-foreground">
+                      <h3 className="text-2xl font-bold text-foreground text-left">
                         {cert.title}
                       </h3>
                       <motion.span
@@ -222,7 +222,9 @@ const Certificates = () => {
                         {cert.category}
                       </motion.span>
                     </div>
-                    <p className="text-primary font-semibold">{cert.issuer}</p>
+                    <p className="text-primary font-semibold text-left">
+                      {cert.issuer}
+                    </p>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="h-4 w-4" />
                       <span>{cert.date}</span>
@@ -249,7 +251,7 @@ const Certificates = () => {
                             duration: 0.3,
                             delay: index * 0.1 + 0.3 + skillIndex * 0.1,
                           }}
-                          className="px-3 py-1 rounded-full text-sm bg-primary/10 text-primary"
+                          className="px-3 py-1 rounded-md text-sm bg-secondary/20 text-secondary border border-secondary/30 hover:bg-secondary/30 transition-colors"
                         >
                           {skill}
                         </motion.span>
