@@ -20,6 +20,72 @@ import { motion, AnimatePresence } from "framer-motion";
 const projects = [
   {
     id: 1,
+    title: "Cenematic",
+    description:
+      "Cinematic is an online cinema ticket booking system built with Java Servlet and JSP, enabling users to browse movies, choose seats, and make secure bookings.",
+    fullDescription: `Cinematic is a web-based cinema ticket booking system developed as part of a Java Servlet & JSP course at FPT University. The platform allows users to explore movies, select showtimes and seats, and complete bookings through a secure interface. Administrators can efficiently manage show schedules, ticket slots, and user accounts.
+    
+    Key Features:
+    • Online Booking: Browse movies, select showtimes, choose seats, and book tickets
+    • User-Friendly Interface: Fully responsive frontend built with Bootstrap and jQuery
+    • Admin Panel: Manage movie schedules, add/remove showtimes, and monitor bookings
+    • Security: Bcrypt-based password encryption and email verification via SMTP
+    • Role-based Access Control: Separate user and admin functionalities
+    • Smart Search: Quickly find movies using the integrated search bar
+    
+    Technologies Used:
+    • Backend: Java Servlet, JSP
+    • Frontend: HTML, CSS, JavaScript, Bootstrap, jQuery
+    • Database: SQL Server
+    • Security: Bcrypt for password encryption
+    • Services: SMTP for email notifications
+    
+    Deployment & Setup:
+    • IDE: Eclipse or IntelliJ (Ultimate version)
+    • Server: Apache Tomcat 9.x (port 8080, shutdown 8005)
+    • Database: SQL Server 2019 or later
+    • Build Tool: Maven (mvn clean install)
+    • Access:
+      - User Portal: http://localhost:8080/cinematic
+      - Admin Panel: http://localhost:8080/admin
+    
+    Notes:
+    • Recommended account: username: sa, password: 12245
+    • If using Tomcat 10+, replace javax.* with jakarta.*
+    • Replace javafx.Pair with a custom Pair class (already updated in the repo)`,
+    image: "/assets/images/cenematic.png",
+    tags: [
+      "Java Servlet",
+      "JSP",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Bootstrap",
+      "SQL Server",
+      "Bcrypt",
+      "jQuery",
+    ],
+    demoUrl: "",
+    githubUrl: "https://github.com/dangkhoipham80/Cenematic",
+    features: [
+      "Online cinema ticket booking",
+      "Responsive and intuitive UI",
+      "Admin panel for schedule management",
+      "Secure login system with Bcrypt encryption",
+      "Movie search functionality",
+    ],
+    challenges: [
+      "Implementing full CRUD operations for admin panel",
+      "Integrating SMTP email service securely",
+      "Creating responsive UI with Bootstrap",
+      "Managing compatibility with Java libraries and Tomcat",
+    ],
+    createdAt: "2024-08-11",
+    endedAt: "2024-09-22",
+    status: "Completed",
+  },
+  {
+    id: 2,
     title: "Feng Shui Koi",
     description:
       "The FengShui Koi Consulting System is a project that provides consultation on Feng Shui and compatibility for Koi fish and ponds.",
@@ -65,7 +131,7 @@ const projects = [
     status: "Completed",
   },
   {
-    id: 2,
+    id: 3,
     title: "Portfolio",
     description:
       "This is my portfolio website. A project that focuses to show my Frontend skills and introduce myself.",
@@ -101,7 +167,7 @@ const projects = [
     status: "In Progress",
   },
   {
-    id: 3,
+    id: 4,
     title: "EduPath",
     description:
       "EduPath is a smart platform that helps high school students explore universities, compare majors, and receive 24/7 career guidance.",
@@ -152,7 +218,7 @@ The platform is being built using scalable architecture and modern technologies 
     status: "Completed",
   },
   {
-    id: 4,
+    id: 5,
     title: "Food Forum",
     description:
       "Food Forum is a vibrant community platform for food lovers to share recipes, experiences, and engage in real-time conversations.",
