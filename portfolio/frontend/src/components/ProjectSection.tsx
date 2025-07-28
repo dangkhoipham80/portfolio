@@ -188,7 +188,7 @@ The platform is being built using scalable architecture and modern technologies 
       "Nginx",
     ],
     demoUrl: "",
-    githubUrl: "https://github.com/dangkhoipham80/FoodForum",
+    githubUrl: "https://gitlab.com/fpt2843445/period_7/swd392/food-forum",
     features: [
       "Post recipes and food experiences",
       "Comment, like, and interact with others",
