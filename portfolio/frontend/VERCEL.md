@@ -36,6 +36,8 @@ cd frontend
 vercel --prod
 ```
 
+**Lưu ý:** Nếu deploy không update, dùng `vercel --prod --force` để bỏ qua cache
+
 #### **2.2 Deploy preview**
 
 ```bash
@@ -118,6 +120,25 @@ npm run type-check
 # Fix lỗi ESLint
 npm run lint
 ```
+
+### **Cache Issues - Deploy Không Update:**
+
+```bash
+# Force rebuild (bỏ qua cache)
+vercel --prod --force
+
+# Clear cache hoàn toàn
+vercel --prod --clear-cache
+
+# Hoặc xóa .vercel folder và deploy lại
+rm -rf .vercel
+vercel --prod
+
+# Force rebuild với environment variable
+vercel --prod --build-env FORCE_REBUILD=true
+```
+
+**Nguyên nhân:** Vercel cache build để tăng tốc, đôi khi không detect được changes
 
 ### **Lỗi API Calls:**
 
@@ -233,6 +254,12 @@ vercel remove
 
 # Link existing project
 vercel link
+
+# Force rebuild (bỏ cache)
+vercel --prod --force
+
+# Clear cache
+vercel --prod --clear-cache
 ```
 
 ---
