@@ -473,9 +473,15 @@ const ProjectSection = () => {
   };
 
   useEffect(() => {
+    let isHovered = false;
+    let isScrolling = false;
+
     const startAutoScroll = () => {
+      if (isHovered || isScrolling) return;
+
       autoScrollRef.current = setInterval(() => {
-        if (scrollRef.current) {
+        if (scrollRef.current && !isHovered && !isScrolling) {
+          isScrolling = true;
           const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
           if (scrollLeft + clientWidth >= scrollWidth) {
             scrollRef.current.scrollTo({
@@ -485,42 +491,52 @@ const ProjectSection = () => {
           } else {
             scroll("right");
           }
-        }
-      }, 15000); // Tăng từ 10000 lên 15000 (15 giây)
-    };
 
-    startAutoScroll();
+          // Reset scrolling flag after animation
+          setTimeout(() => {
+            isScrolling = false;
+          }, 1000);
+        }
+      }, 25000); // 25 giây
+    };
 
     const container = scrollRef.current;
     if (container) {
-      container.addEventListener("mouseenter", () => {
+      const handleMouseEnter = () => {
+        isHovered = true;
         if (autoScrollRef.current) {
           clearInterval(autoScrollRef.current);
         }
-      });
+      };
 
-      container.addEventListener("mouseleave", () => {
+      const handleMouseLeave = () => {
+        isHovered = false;
         startAutoScroll();
-      });
-    }
+      };
 
-    return () => {
-      if (autoScrollRef.current) {
-        clearInterval(autoScrollRef.current);
-      }
-      if (container) {
-        const handleMouseEnter = () => {
-          if (autoScrollRef.current) {
-            clearInterval(autoScrollRef.current);
-          }
-        };
-        const handleMouseLeave = () => {
-          startAutoScroll();
-        };
+      const handleScroll = () => {
+        isScrolling = true;
+        setTimeout(() => {
+          isScrolling = false;
+        }, 1000);
+      };
+
+      container.addEventListener("mouseenter", handleMouseEnter);
+      container.addEventListener("mouseleave", handleMouseLeave);
+      container.addEventListener("scroll", handleScroll);
+
+      // Start auto-scroll after initial delay
+      setTimeout(startAutoScroll, 3000);
+
+      return () => {
+        if (autoScrollRef.current) {
+          clearInterval(autoScrollRef.current);
+        }
         container.removeEventListener("mouseenter", handleMouseEnter);
         container.removeEventListener("mouseleave", handleMouseLeave);
-      }
-    };
+        container.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
 
   return (
@@ -576,12 +592,12 @@ const ProjectSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.15 }}
-                  whileHover={{ y: -10 }}
+                  whileHover={{ y: -2 }}
                   className="group bg-card/80 rounded-2xl overflow-hidden shadow-lg border border-primary/20 hover:border-primary/60 transition-all duration-500 card-hover flex flex-col min-w-[340px] max-w-[340px] h-[500px] snap-center backdrop-blur-md relative"
                 >
                   <div className="h-60 overflow-hidden relative flex-shrink-0">
                     <motion.img
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.8 }}
                       src={project.image}
                       alt={project.title}
@@ -635,7 +651,7 @@ const ProjectSection = () => {
                     </div>
                     <div className="mt-auto flex justify-between items-center">
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
+                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ duration: 0.3 }}
                         onClick={() => setSelectedProject(project)}
@@ -647,7 +663,7 @@ const ProjectSection = () => {
                       <div className="flex space-x-3">
                         {project.demoUrl && (
                           <motion.a
-                            whileHover={{ scale: 1.1, rotate: 3 }}
+                            whileHover={{ scale: 1.02, rotate: 0.5 }}
                             transition={{ duration: 0.3 }}
                             href={project.demoUrl}
                             target="_blank"
@@ -658,7 +674,7 @@ const ProjectSection = () => {
                           </motion.a>
                         )}
                         <motion.a
-                          whileHover={{ scale: 1.1, rotate: -3 }}
+                          whileHover={{ scale: 1.02, rotate: -0.5 }}
                           transition={{ duration: 0.3 }}
                           href={project.githubUrl}
                           target="_blank"

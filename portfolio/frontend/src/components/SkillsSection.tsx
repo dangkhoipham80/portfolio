@@ -67,29 +67,24 @@ const skills = [
     icon: Code,
   },
   // Backend Skills
-  { name: "Python", level: "Advanced", category: "Backend", icon: Code },
-  { name: "Java", level: "Intermediate", category: "Backend", icon: Code },
-  { name: "FastAPI", level: "Intermediate", category: "Backend", icon: Code },
-  { name: "Django", level: "Intermediate", category: "Backend", icon: Code },
-  { name: "Flask", level: "Intermediate", category: "Backend", icon: Code },
   {
-    name: "Spring Boot",
+    name: "Java Spring Boot",
     level: "Intermediate",
     category: "Backend",
     icon: Code,
   },
+  { name: "FastAPI", level: "Intermediate", category: "Backend", icon: Code },
 
   // Database Skills
-  { name: "SQL", level: "Advanced", category: "Database", icon: Database },
   {
     name: "MongoDB",
-    level: "Intermediate",
+    level: "Beginner",
     category: "Database",
     icon: Database,
   },
   {
     name: "PostgreSQL",
-    level: "Advanced",
+    level: "Intermediate",
     category: "Database",
     icon: Database,
   },
@@ -101,7 +96,7 @@ const skills = [
   },
   {
     name: "SQLite",
-    level: "Intermediate",
+    level: "Beginner",
     category: "Database",
     icon: Database,
   },
@@ -118,10 +113,10 @@ const skills = [
   { name: "Kubernetes", level: "Beginner", category: "DevOps", icon: Wrench },
 
   // Tool Skills
-  { name: "Git", level: "Advanced", category: "Tools", icon: GitBranch },
-  { name: "GitHub", level: "Advanced", category: "Tools", icon: GitBranch },
-  { name: "Vscode", level: "Expert", category: "Tools", icon: Wrench },
-  { name: "Slack", level: "Intermediate", category: "Tools", icon: Wrench },
+  { name: "GitLab", level: "Intermediate", category: "Tools", icon: GitBranch },
+  { name: "GitHub", level: "Intermediate", category: "Tools", icon: GitBranch },
+  { name: "Vscode", level: "Intermediate", category: "Tools", icon: Wrench },
+  { name: "Slack", level: "Beginner", category: "Tools", icon: Wrench },
 ];
 
 const categories = [
@@ -290,7 +285,10 @@ const SkillsSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{
+                  duration: 0.3,
+                  delay: showAllSkills ? 0 : index * 0.1,
+                }}
                 whileHover={{ scale: 1.02, y: -5 }}
                 className="gradient-border p-6 rounded-2xl card-hover group bg-background/80 shadow-lg transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:shadow-primary/10"
               >
@@ -329,7 +327,10 @@ const SkillsSection = () => {
                               : "40%",
                         }}
                         viewport={{ once: true }}
-                        transition={{ duration: 1, delay: index * 0.1 }}
+                        transition={{
+                          duration: 0.8,
+                          delay: showAllSkills ? 0 : index * 0.1,
+                        }}
                         className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 h-2 rounded-full"
                       />
                     </div>

@@ -17,14 +17,14 @@ const codeStrings = {
   role: "Full-Stack Developer",
   focus: ["Backend Development", "AI Engineering"],
   skills: [
-    "Efficient Systems",
-    "Scalable Architecture",
-    "Secure Solutions"
+    "Java Spring Boot Development",
+    "FastAPI & Python Backend",
+    "Database Design (PostgreSQL/MongoDB)"
   ],
   passion: [
-    "New Technologies",
-    "Problem Solving",
-    "LeetCode Challenges"
+    "AI & Machine Learning",
+    "Backend Architecture",
+    "Continuous Learning"
   ]
 };`,
   python: `class Developer:
@@ -35,14 +35,14 @@ const codeStrings = {
             "AI Engineering"
         ]
         self.skills = [
-            "Efficient Systems",
-            "Scalable Architecture",
-            "Secure Solutions"
+            "Java Spring Boot Development",
+            "FastAPI & Python Backend",
+            "Database Design (PostgreSQL/MongoDB)"
         ]
         self.passion = [
-            "New Technologies",
-            "Problem Solving",
-            "LeetCode Challenges"
+            "AI & Machine Learning",
+            "Backend Architecture", 
+            "Continuous Learning"
         ]`,
   c: `struct Developer {
     char* role;
@@ -56,12 +56,12 @@ struct Developer createDeveloper() {
     dev.role = "Full-Stack Developer";
     dev.focus[0] = "Backend Development";
     dev.focus[1] = "AI Engineering";
-    dev.skills[0] = "Efficient Systems";
-    dev.skills[1] = "Scalable Architecture";
-    dev.skills[2] = "Secure Solutions";
-    dev.passion[0] = "New Technologies";
-    dev.passion[1] = "Problem Solving";
-    dev.passion[2] = "LeetCode Challenges";
+    dev.skills[0] = "Java Spring Boot Development";
+    dev.skills[1] = "FastAPI & Python Backend";
+    dev.skills[2] = "Database Design (PostgreSQL/MongoDB)";
+    dev.passion[0] = "AI & Machine Learning";
+    dev.passion[1] = "Backend Architecture";
+    dev.passion[2] = "Continuous Learning";
     return dev;
 }`,
   cpp: `class Developer {
@@ -79,14 +79,14 @@ public:
             "AI Engineering"
         };
         skills = {
-            "Efficient Systems",
-            "Scalable Architecture",
-            "Secure Solutions"
+            "Java Spring Boot Development",
+            "FastAPI & Python Backend",
+            "Database Design (PostgreSQL/MongoDB)"
         };
         passion = {
-            "New Technologies",
-            "Problem Solving",
-            "LeetCode Challenges"
+            "AI & Machine Learning",
+            "Backend Architecture",
+            "Continuous Learning"
         };
     }
 };`,
@@ -103,14 +103,14 @@ public:
             "AI Engineering"
         };
         this.skills = new String[] {
-            "Efficient Systems",
-            "Scalable Architecture",
-            "Secure Solutions"
+            "Java Spring Boot Development",
+            "FastAPI & Python Backend",
+            "Database Design (PostgreSQL/MongoDB)"
         };
         this.passion = new String[] {
-            "New Technologies",
-            "Problem Solving",
-            "LeetCode Challenges"
+            "AI & Machine Learning",
+            "Backend Architecture",
+            "Continuous Learning"
         };
     }
 }`,
