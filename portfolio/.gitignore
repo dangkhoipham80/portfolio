@@ -1,142 +1,17 @@
-# Dependencies
-/node_modules
-/.pnp
-.pnp.js
+# ====================================
+# PORTFOLIO PROJECT - .gitignore
+# ====================================
 
-# Testing
-/coverage
-
-# Production
-/build
-/dist
-/.next
-/out
-
-# Misc
-.DS_Store
-*.pem
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# Vercel
-.vercel
-
-# Cache
-.cache/
-.eslintcache
-.stylelintcache
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional stylelint cache
-.stylelintcache
-
-# Yarn Integrity file
-.yarn-integrity
-
-# Local Netlify folder
-.netlify
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-backend/.env
-frontend/.env
-backend/venv/*
-frontend/node_modules
-frontend/.nuxt
-frontend/.nuxtg
-frontend/.nuxtg-cache
-frontend/.nuxtg-ssr
-
-# Ignore build artifacts
-*.build
-*.tgz
-*.gz
-
-# Ignore coverage reports
-coverage/
-*.lcov
-
-# Ignore temporary files
-tmp/
-temp/
-.cache/
-
-# Ignore Docker files
-Dockerfile*
-docker-compose*.yml
-
-# Ignore build directories
-build/
-dist/
-out/
-
-# Ignore local configuration files
-*.local.js
-*.local.json
-
-# Ignore lock files in frontend and backend directories
-backend/package-lock.json
-frontend/package-lock.json
-
-# Ignore specific IDE configurations
-.idea/workspace.xml
-.idea/tasks.xml
-
-# Ignore specific OS files
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-# Python
+# ----------------
+# PYTHON & BACKEND
+# ----------------
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -155,87 +30,28 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-*.pyc
-*.pyo
-*.pyd
 
-# Virtual Environment
+# Virtual environments
 venv/
 env/
 ENV/
 .venv/
 .env/
 backend/venv/
+backend/env/
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.history/
-
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-.npm
-.yarn-integrity
-
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
-.next/
-out/
-
-# OS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# Database
+# Database files
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage reports
-htmlcov/
+# Testing
 .coverage
-.coverage.*
-coverage.xml
-*.cover
-.hypothesis/
 .pytest_cache/
-.nyc_output
+.tox/
+.nox/
+htmlcov/
+.hypothesis/
 
 # mypy
 .mypy_cache/
@@ -254,25 +70,237 @@ Pipfile.lock
 # PEP 582
 __pypackages__/
 
-# Celery stuff
+# Celery
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# SageMath
 *.sage.py
 
-# Spyder project settings
+# Spyder
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Rope
 .ropeproject
 
-# mkdocs documentation
+# mkdocs
 /site
 
-# Temporary files
-*.tmp
-*.temp
+# Pyre type checker
+.pyre/
+
+# ----------------
+# NODE.JS & FRONTEND
+# ----------------
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+jspm_packages/
+
+# Production builds
+build/
+dist/
+.next/
+out/
+.nuxt/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+*.lcov
+.nyc_output
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Optional npm cache
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache
 .cache/
 .parcel-cache/
+
+# Gatsby files
+.cache/
+public
+
+# Storybook build outputs
+.out
+.storybook-out
+
+# Vercel
+.vercel
+
+# Local Netlify folder
+.netlify
+
+# ----------------
+# ENVIRONMENT VARIABLES
+# ----------------
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# ----------------
+# LOGS
+# ----------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ----------------
+# OPERATING SYSTEM
+# ----------------
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ----------------
+# IDE & EDITORS
+# ----------------
+# Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains IDEs
+.idea/
+*.swp
+*.swo
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# ----------------
+# TEMPORARY FILES
+# ----------------
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# ----------------
+# DOCKER
+# ----------------
+.dockerignore
+docker-compose.override.yml
+
+# ----------------
+# SSL CERTIFICATES
+# ----------------
+*.pem
+*.key
+*.crt
+
+# ----------------
+# PACKAGE MANAGERS
+# ----------------
+# Lock files (optional - uncomment if you want to ignore them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ----------------
+# PROJECT SPECIFIC
+# ----------------
+# API documentation
+backend/docs/
+
+# Alembic migration files (keep structure, ignore specific migrations)
+backend/alembic/versions/*.py
+!backend/alembic/versions/__init__.py
+
+# Build outputs
+frontend/dist/
+frontend/build/
+backend/build/
+
+# Local development files
+*.local
+
+# ----------------
+# ARCHIVES
+# ----------------
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# ----------------
+# MISC
+# ----------------
+.history/

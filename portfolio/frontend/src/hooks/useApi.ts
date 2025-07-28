@@ -5,13 +5,7 @@ import {
   certificatesApi,
   contactsApi,
 } from "../services/api";
-import {
-  Project,
-  Skill,
-  Certificate,
-  Contact,
-  ContactCreate,
-} from "../types/api";
+import type { ContactCreate } from "../types/api";
 
 // Generic hook for API calls
 export function useApi<T>(

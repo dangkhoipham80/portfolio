@@ -55,13 +55,17 @@ cp env.example .env
 
 ### Option 1: Local Development
 
-#### Database Setup (PostgreSQL)
+#### Database Setup (Neon PostgreSQL)
+
+This project uses Neon PostgreSQL database. No local database setup required.
 
 ```bash
-# Install PostgreSQL and create database
-createdb portfolio_db
-# Or use Docker
-docker run --name portfolio-postgres -e POSTGRES_DB=portfolio_db -e POSTGRES_USER=portfolio_user -e POSTGRES_PASSWORD=portfolio_password -p 5432:5432 -d postgres:15
+# Test database connection
+cd backend
+python test_db_connection.py
+
+# Initialize database with sample data
+python init-db.py
 ```
 
 #### Backend Setup
@@ -71,6 +75,12 @@ cd backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+
+# Setup environment file
+python setup_env.py
+
+# Test database connection
+python test_db_connection.py
 
 # Run database migrations
 alembic upgrade head
@@ -90,7 +100,10 @@ npm run dev
 ### Option 2: Docker Development
 
 ```bash
-# Start all services with PostgreSQL
+# Start backend with Neon database
+docker-compose up backend
+
+# Or start all services
 docker-compose up --build
 ```
 
@@ -325,8 +338,8 @@ alembic current
 #### Backend (.env)
 
 ```env
-# Database Configuration
-DATABASE_URL=postgresql://user:password@localhost:5432/portfolio_db
+# Database Configuration (Neon PostgreSQL)
+DATABASE_URL=postgresql://neondb_owner:npg_og2vJ0BzqPks@ep-restless-darkness-a1fd7jga-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
 
 # Security
 SECRET_KEY=your-super-secret-key-change-this-in-production

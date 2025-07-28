@@ -3,7 +3,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import StarBackground from "../components/StarBackground";
 import NatureBackground from "../components/NatureBackground";
 import { useTheme } from "../components/ThemeContext";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -28,7 +28,7 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.8,
-      ease: [0.6, -0.05, 0.01, 0.99],
+      ease: easeOut,
     },
   },
 };

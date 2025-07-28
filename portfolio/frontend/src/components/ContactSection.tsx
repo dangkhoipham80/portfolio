@@ -13,7 +13,7 @@ import { cn } from "../lib/utils";
 import { useToast } from "../hooks/use-toast";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,7 +33,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut",
+      ease: easeOut,
     },
   },
 };

@@ -22,9 +22,10 @@ def init_database():
         with engine.connect() as conn:
             result = conn.execute(text("SELECT 1"))
             print("✅ Database connection successful")
+            print(f"📊 Connected to Neon Database: {settings.DATABASE_URL.split('@')[1].split('/')[0]}")
     except Exception as e:
         print(f"❌ Database connection failed: {e}")
-        print("Please ensure PostgreSQL is running and credentials are correct")
+        print("Please ensure Neon database credentials are correct")
         sys.exit(1)
     
     # Create tables

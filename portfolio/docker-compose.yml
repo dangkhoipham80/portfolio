@@ -1,35 +1,16 @@
 version: "3.8"
 
 services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: portfolio_db
-      POSTGRES_USER: portfolio_user
-      POSTGRES_PASSWORD: portfolio_password
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U portfolio_user -d portfolio_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://portfolio_user:portfolio_password@postgres:5432/portfolio_db
+      - DATABASE_URL=postgresql://neondb_owner:npg_og2vJ0BzqPks@ep-restless-darkness-a1fd7jga-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
       - SECRET_KEY=your-super-secret-key-change-this-in-production
       - BACKEND_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
     volumes:
       - ./backend:/app
-    depends_on:
-      postgres:
-        condition: service_healthy
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
@@ -44,6 +25,3 @@ services:
     depends_on:
       - backend
     command: npm run dev
-
-volumes:
-  postgres_data:
