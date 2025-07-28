@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import React from "react";
 
 const projects = [
   {
@@ -81,7 +80,7 @@ const projects = [
     • Interactive Elements: Engaging UI components and micro-interactions`,
     image: "/assets/images/portfolio.png",
     tags: ["React", "TypeScript", "Tailwind CSS", "Vite", "Vercel"],
-    demoUrl: "https://my-portfolio-black-seven-60.vercel.app/",
+    demoUrl: "https://portfolio-fthuepi8a-pham-dang-khois-projects.vercel.app/",
     githubUrl: "https://github.com/dangkhoipham80/portfolio",
     features: [
       "Interactive animated backgrounds",
