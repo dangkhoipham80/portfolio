@@ -106,7 +106,9 @@ const AboutMeSection = () => {
               </a>
 
               <a
-                href="/contact"
+                href="/assets/CV_PhamDangKhoi_Internship.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-3 rounded-full border-2 border-primary text-primary hover:bg-primary/10 transition-all duration-300 relative overflow-hidden group transform hover:scale-105"
               >
                 <span className="relative z-10">Download CV</span>
